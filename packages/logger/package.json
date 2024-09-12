@@ -1,0 +1,20 @@
+{
+    "name": "@imperia/logger",
+    "version": "0.0.0",
+    "scripts": {
+        "typecheck": "tsc --noEmit",
+        "test": "bun test"
+    },
+    "dependencies": {
+        "colorette": "^2.0.20"
+    },
+    "devDependencies": {
+        "@imperia/typescript": "workspace:*",
+        "@types/bun": "latest",
+        "@types/node": "latest",
+        "typescript": "^5"
+    },
+    "exports": {
+        ".": "./src/logger.ts"
+    }
+}
