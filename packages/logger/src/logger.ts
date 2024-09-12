@@ -1,5 +1,5 @@
 import { Timestamp } from "@sapphire/timestamp";
-import { blue, cyan, gray, green, magenta, red, yellow } from "colorette";
+import { blue, cyan, gray, greenBright, red, redBright, yellow } from "colorette";
 
 export enum LogLevel {
     Trace = 10,
@@ -95,13 +95,13 @@ export class ImperiaLogger implements ILogger {
             case LogLevel.Debug:
                 return blue(levelName);
             case LogLevel.Info:
-                return green(levelName);
+                return greenBright(levelName);
             case LogLevel.Warn:
                 return yellow(levelName);
             case LogLevel.Error:
-                return red(levelName);
+                return redBright(levelName);
             case LogLevel.Fatal:
-                return magenta(levelName);
+                return red(levelName);
             default:
                 return levelName;
         }
