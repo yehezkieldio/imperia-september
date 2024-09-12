@@ -1,4 +1,5 @@
-import { blue, cyan, green, magenta, red, yellow } from "colorette";
+import { Timestamp } from "@sapphire/timestamp";
+import { blue, cyan, gray, green, magenta, red, yellow } from "colorette";
 
 export enum LogLevel {
     Trace = 10,
@@ -19,16 +20,33 @@ interface ILogger {
     fatal(...values: readonly unknown[]): void;
 }
 
+export interface ImperiaLoggerOptions {
+    minLevel?: LogLevel;
+    withTimestamp?: boolean;
+}
+
 export class ImperiaLogger implements ILogger {
     private minLevel: LogLevel;
+    private timestamp: Timestamp;
+    private withTimestamp = true;
 
-    constructor(minLevel: LogLevel = LogLevel.Trace) {
-        this.minLevel = minLevel;
+    constructor(
+        options: ImperiaLoggerOptions = {
+            minLevel: LogLevel.Info,
+            withTimestamp: true,
+        },
+    ) {
+        this.minLevel = options.minLevel ?? LogLevel.Debug;
+        this.withTimestamp = options.withTimestamp ?? true;
+
+        this.timestamp = new Timestamp("YYYY-MM-DD HH:mm:ss");
     }
 
     #has(level: LogLevel): boolean {
         return level >= this.minLevel;
     }
+
+    /* -------------------------------------------------------------------------- */
 
     trace(...values: readonly unknown[]): void {
         this.#write(LogLevel.Trace, ...values);
@@ -54,9 +72,17 @@ export class ImperiaLogger implements ILogger {
         this.#write(LogLevel.Fatal, ...values);
     }
 
+    /* -------------------------------------------------------------------------- */
+
     #write(level: LogLevel, ...values: readonly unknown[]): void {
         if (this.#has(level)) {
-            console.log(this.#colorize(level).padEnd(16), ...values);
+            if (this.withTimestamp) {
+                const time = this.timestamp.displayUTC(new Date());
+
+                console.log(`${gray(time)} ${this.#colorize(level).padEnd(16)} ${values}`);
+            } else {
+                console.log(`${this.#colorize(level).padEnd(16)} ${values}`);
+            }
         }
     }
 

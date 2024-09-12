@@ -1,5 +1,5 @@
-import { ImperiaLogger, LogLevel } from "../src/logger";
+import { ImperiaLogger } from "../src/logger";
 
-const logger = new ImperiaLogger(LogLevel.Debug);
+const logger = new ImperiaLogger();
 
 logger.info("Hello, world!");

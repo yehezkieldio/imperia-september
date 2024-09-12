@@ -9,7 +9,9 @@
         "start": "bun --env-file ../../.env .",
         "typecheck": "tsc --noEmit"
     },
-    "dependencies": {},
+    "dependencies": {
+        "@imperia/logger": "workspace:*"
+    },
     "devDependencies": {
         "@imperia/typescript": "workspace:*",
         "@types/bun": "latest",
