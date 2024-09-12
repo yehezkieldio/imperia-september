@@ -10,8 +10,6 @@ const files: string[] = (await readdir(path.join(import.meta.dir, "../", "src"),
     .filter((file: string): boolean => file.endsWith(".ts"))
     .map((file: string): string => path.join("src", file));
 
-const start: number = Date.now();
-
 logger.info("Building...");
 
 const result: BuildOutput = await Bun.build({
@@ -22,15 +20,12 @@ const result: BuildOutput = await Bun.build({
     minify: true,
 });
 
-const end: number = Date.now();
-const elapsed: number = end - start;
-
 if (!result.success) {
-    logger.error(`Build failed. Time elapsed: ${elapsed}ms`);
+    logger.error("Build failed!");
 
     for (const message of result.logs) {
         console.error(message);
     }
 } else {
-    logger.info(`Build successful. Time elapsed: ${elapsed}ms`);
+    logger.info("Build successful!");
 }
