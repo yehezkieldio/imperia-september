@@ -1,0 +1,20 @@
+{
+    "name": "@imperia/environment",
+    "private": true,
+    "scripts": {
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@t3-oss/env-core": "^0.11.0",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "@imperia/typescript": "workspace:*",
+        "@types/bun": "latest",
+        "@types/node": "latest",
+        "typescript": "^5"
+    },
+    "exports": {
+        "./discord-bot": "./src/discord-bot.ts"
+    }
+}

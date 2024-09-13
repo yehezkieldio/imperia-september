@@ -1,0 +1,5 @@
+{
+    "extends": "@imperia/typescript/base.json",
+    "include": ["**/*.ts", "../../tooling/typescript/reset.d.ts"],
+    "exclude": ["node_modules", "dist"]
+}
