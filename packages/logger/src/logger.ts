@@ -12,12 +12,14 @@ export enum LogLevel {
 }
 
 interface ILogger {
+    has: (level: LogLevel) => boolean;
     trace(...values: readonly unknown[]): void;
     debug(...values: readonly unknown[]): void;
     info(...values: readonly unknown[]): void;
     warn(...values: readonly unknown[]): void;
     error(...values: readonly unknown[]): void;
     fatal(...values: readonly unknown[]): void;
+    write: (level: LogLevel, ...values: readonly unknown[]) => void;
 }
 
 export interface ImperiaLoggerOptions {
@@ -42,40 +44,40 @@ export class ImperiaLogger implements ILogger {
         this.timestamp = new Timestamp("YYYY-MM-DD HH:mm:ss");
     }
 
-    #has(level: LogLevel): boolean {
+    has(level: LogLevel): boolean {
         return level >= this.minLevel;
     }
 
     /* -------------------------------------------------------------------------- */
 
     trace(...values: readonly unknown[]): void {
-        this.#write(LogLevel.Trace, ...values);
+        this.write(LogLevel.Trace, ...values);
     }
 
     debug(...values: readonly unknown[]): void {
-        this.#write(LogLevel.Debug, ...values);
+        this.write(LogLevel.Debug, ...values);
     }
 
     info(...values: readonly unknown[]): void {
-        this.#write(LogLevel.Info, ...values);
+        this.write(LogLevel.Info, ...values);
     }
 
     warn(...values: readonly unknown[]): void {
-        this.#write(LogLevel.Warn, ...values);
+        this.write(LogLevel.Warn, ...values);
     }
 
     error(...values: readonly unknown[]): void {
-        this.#write(LogLevel.Error, ...values);
+        this.write(LogLevel.Error, ...values);
     }
 
     fatal(...values: readonly unknown[]): void {
-        this.#write(LogLevel.Fatal, ...values);
+        this.write(LogLevel.Fatal, ...values);
     }
 
     /* -------------------------------------------------------------------------- */
 
-    #write(level: LogLevel, ...values: readonly unknown[]): void {
-        if (this.#has(level)) {
+    write(level: LogLevel, ...values: readonly unknown[]): void {
+        if (this.has(level)) {
             if (this.withTimestamp) {
                 const time = this.timestamp.displayUTC(new Date());
 

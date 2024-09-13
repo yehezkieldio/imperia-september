@@ -10,8 +10,19 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
+        "@imperia/environment": "workspace:*",
         "@imperia/logger": "workspace:*",
-        "@imperia/environment": "workspace:*"
+        "@sapphire/discord.js-utilities": "^7.3.0",
+        "@sapphire/fetch": "^3.0.3",
+        "@sapphire/framework": "^5.2.1",
+        "@sapphire/pieces": "^4.3.1",
+        "@sapphire/plugin-scheduled-tasks": "^10.0.1",
+        "@sapphire/plugin-subcommands": "^7.0.0",
+        "@sapphire/time-utilities": "^1.7.12",
+        "@sapphire/utilities": "^3.17.0",
+        "chrono-node": "^1.4.9",
+        "dayjs": "^1.11.13",
+        "discord.js": "^14.16.2"
     },
     "devDependencies": {
         "@imperia/typescript": "workspace:*",
