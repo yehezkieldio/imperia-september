@@ -10,7 +10,8 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@imperia/logger": "workspace:*"
+        "@imperia/logger": "workspace:*",
+        "@imperia/environment": "workspace:*"
     },
     "devDependencies": {
         "@imperia/typescript": "workspace:*",

@@ -2,7 +2,8 @@
     "name": "@imperia/environment",
     "private": true,
     "scripts": {
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "test": "bun test"
     },
     "dependencies": {
         "@t3-oss/env-core": "^0.11.0",
