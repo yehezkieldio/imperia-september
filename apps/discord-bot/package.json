@@ -12,6 +12,7 @@
     "dependencies": {
         "@imperia/environment": "workspace:*",
         "@imperia/logger": "workspace:*",
+        "@imperia/stores": "workspace:*",
         "@sapphire/discord.js-utilities": "^7.3.0",
         "@sapphire/fetch": "^3.0.3",
         "@sapphire/framework": "^5.2.1",
