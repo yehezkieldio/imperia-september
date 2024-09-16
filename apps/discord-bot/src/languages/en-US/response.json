@@ -1,4 +1,6 @@
 {
+    "server_blacklisted": "This server is blacklisted! I cannot execute commands in this server...",
+    "user_blacklisted": "You are blacklisted! You cannot execute commands...",
     "command_disabled": "This command is globally disabled! Please try again later...",
     "precondition_cooldown": "This command is on cooldown! Please wait for the cooldown to expire...",
     "precondition_runin": "This command is not available in this context! Please use this command in a {{channel_type}}",

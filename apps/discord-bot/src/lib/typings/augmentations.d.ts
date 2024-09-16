@@ -4,6 +4,7 @@ import type { BlacklistService } from "#services/blacklist";
 import type { ResponseService } from "#services/response";
 
 import type { BotUtility } from "#utilities/bot";
+import type { GuildUtility } from "#utilities/guild";
 
 declare module "@sapphire/pieces" {
     interface Services {

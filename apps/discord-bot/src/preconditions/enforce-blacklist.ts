@@ -1,5 +1,7 @@
 import { AllFlowsPrecondition, type Result, type UserError } from "@sapphire/framework";
+import { i18next } from "@sapphire/plugin-i18next";
 import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Message } from "discord.js";
+
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
 export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
@@ -35,14 +37,14 @@ export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
         if (isServerBlacklisted) {
             return this.error({
                 identifier: ImperiaIdentifiers.ServerBlacklisted,
-                message: "This server is blacklisted from using my commands!",
+                message: i18next.t("response:server_blacklisted"),
             });
         }
 
         if (isUserBlacklisted) {
             return this.error({
                 identifier: ImperiaIdentifiers.ServerBlacklisted,
-                message: "This user is blacklisted from using my commands!",
+                message: i18next.t("response:user_blacklisted"),
             });
         }
 

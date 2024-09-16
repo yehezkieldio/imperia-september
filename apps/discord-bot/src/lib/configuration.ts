@@ -4,7 +4,7 @@ import { ImperiaLogger, LogLevel } from "@imperia/logger";
 import { container } from "@sapphire/pieces";
 import type { InternationalizationContext } from "@sapphire/plugin-i18next";
 import { Time } from "@sapphire/time-utilities";
-import { ActivityType, GatewayIntentBits, Partials } from "discord.js";
+import { ActivityType, type CommandInteraction, GatewayIntentBits, type Message, Partials } from "discord.js";
 
 import type { ImperiaClientOptions } from "#lib/extensions/client";
 
@@ -23,6 +23,12 @@ export const configuration: ImperiaClientOptions = {
         filteredUsers: DEVELOPERS,
     },
     defaultPrefix: "imperia!",
+    fetchPrefix: async (context: Message | CommandInteraction): Promise<string> => {
+        const guildId: string = context.guildId ?? (context.guild?.id as string);
+        container.logger.debug(`Fetching prefix for guild ${guildId}.`);
+
+        return container.utilities.guild.getPrefix(guildId);
+    },
     intents: [
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.Guilds,
