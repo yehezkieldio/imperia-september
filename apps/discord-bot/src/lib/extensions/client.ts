@@ -1,13 +1,15 @@
+import { database, equal } from "@imperia/database";
+import { guildSettings } from "@imperia/database/schema";
 import { discordBotEnv } from "@imperia/environment/discord-bot";
 
 import {
-    type SapphireClientOptions,
     ApplicationCommandRegistries,
     RegisterBehavior,
     SapphireClient,
+    type SapphireClientOptions,
     container,
 } from "@sapphire/framework";
-import type { ClientOptions } from "discord.js";
+import type { ClientOptions, CommandInteraction, Message } from "discord.js";
 
 export interface ImperiaClientOptions extends SapphireClientOptions, ClientOptions {
     overrideApplicationCommandsRegistries?: boolean;
@@ -27,6 +29,14 @@ export class ImperiaClient extends SapphireClient {
             ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.BulkOverwrite);
         }
     }
+
+    public override fetchPrefix = async (context: Message | CommandInteraction): Promise<string> => {
+        const guildId: string = context.guildId ?? (context.guild?.id as string);
+
+        const [settings] = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
+
+        return settings?.prefix ?? "imperia ";
+    };
 
     public override async login(token: string): Promise<string> {
         container.logger.info("ImperiaClient: Logging in...");

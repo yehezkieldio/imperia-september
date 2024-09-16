@@ -2,6 +2,7 @@ import { isMessageInstance } from "@sapphire/discord.js-utilities";
 import { CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import { type Message, SlashCommandBuilder } from "discord.js";
 
+import { resolveKey } from "@sapphire/plugin-i18next";
 import { ImperiaCommand } from "#lib/extensions/command";
 
 export class PingCommand extends ImperiaCommand {
@@ -20,14 +21,14 @@ export class PingCommand extends ImperiaCommand {
         void registry.registerChatInputCommand(command);
     }
 
-    #pleaseWait = "Please wait...";
-    #failed = "Failed to retrieve ping latency.";
-
     /* -------------------------------------------------------------------------- */
 
     public async chatInputRun(interaction: ImperiaCommand.ChatInputCommandInteraction) {
+        const pleaseWait: string = await resolveKey(interaction, "ping:please_wait");
+        const failed: string = await resolveKey(interaction, "ping:failed");
+
         const msg: Message = await interaction.reply({
-            content: this.#pleaseWait,
+            content: pleaseWait,
             fetchReply: true,
         });
 
@@ -38,11 +39,14 @@ export class PingCommand extends ImperiaCommand {
             return msg.edit(response);
         }
 
-        return interaction.editReply(this.#failed);
+        return interaction.editReply(failed);
     }
 
     public async messageRun(message: Message) {
-        const msg: Message = await message.reply(this.#pleaseWait);
+        const pleaseWait: string = await resolveKey(message, "ping:please_wait");
+        const failed: string = await resolveKey(message, "ping:failed");
+
+        const msg: Message = await message.reply(pleaseWait);
 
         if (isMessageInstance(msg)) {
             const context: ImperiaCommand.MessageContext = msg;
@@ -51,7 +55,7 @@ export class PingCommand extends ImperiaCommand {
             return msg.edit(response);
         }
 
-        return message.edit(this.#failed);
+        return message.edit(failed);
     }
 
     /* -------------------------------------------------------------------------- */

@@ -1,6 +1,7 @@
 import { discordBotEnv } from "@imperia/environment/discord-bot";
 
 import "@imperia/stores/register";
+import "@sapphire/plugin-i18next/register";
 
 import { configuration } from "#lib/configuration";
 import { ImperiaClient } from "#lib/extensions/client";
