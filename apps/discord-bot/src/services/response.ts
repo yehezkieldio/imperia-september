@@ -36,11 +36,11 @@ export class ResponseService extends Service {
         }
 
         if (error.identifier === ImperiaIdentifiers.PreconditionCooldown) {
-            return i18next.t("response:command_disabled");
+            return i18next.t("response:command_cooldown");
         }
 
         if (error.identifier === ImperiaIdentifiers.PreconditionRunIn) {
-            return i18next.t("response:precondition_runin", { channel_type: getChannelType(error) });
+            return i18next.t("response:command_run", { channel_type: getChannelType(error) });
         }
 
         /* ------------------------ PERMISSION PRECONDITIONS ------------------------ */
