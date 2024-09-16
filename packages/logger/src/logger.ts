@@ -1,5 +1,5 @@
 import { Timestamp } from "@sapphire/timestamp";
-import { blue, cyan, gray, greenBright, red, redBright, yellow } from "colorette";
+import { blue, cyan, dim, greenBright, red, redBright, yellow } from "colorette";
 
 export enum LogLevel {
     Trace = 10,
@@ -81,7 +81,7 @@ export class ImperiaLogger implements ILogger {
             if (this.withTimestamp) {
                 const time = this.timestamp.displayUTC(new Date());
 
-                console.log(`${gray(time)} ${this.#colorize(level).padEnd(16)} ${values}`);
+                console.log(`${dim(time)} ${this.#colorize(level).padEnd(16)} ${values}`);
             } else {
                 console.log(`${this.#colorize(level).padEnd(16)} ${values}`);
             }

@@ -3,8 +3,8 @@ import { ImperiaLogger, LogLevel } from "@imperia/logger";
 import { Time } from "@sapphire/time-utilities";
 import { ActivityType, GatewayIntentBits, Partials } from "discord.js";
 
-import type { ImperiaClientOptions } from "#lib/extensions/client";
 import { discordBotEnv } from "@imperia/environment/discord-bot";
+import type { ImperiaClientOptions } from "#lib/extensions/client";
 
 export const DEVELOPERS: string[] = ["327849142774923266"];
 export const DEVELOPMENT_SERVERS: string[] = ["1209737959587450980"];
@@ -32,6 +32,7 @@ export const configuration: ImperiaClientOptions = {
     loadMessageCommandListeners: true,
     logger: {
         instance: new ImperiaLogger({
+            withTimestamp: true,
             minLevel: discordBotEnv.NODE_ENV === "development" ? LogLevel.Debug : LogLevel.Info,
         }),
         level: discordBotEnv.NODE_ENV === "development" ? LogLevel.Debug : LogLevel.Info,

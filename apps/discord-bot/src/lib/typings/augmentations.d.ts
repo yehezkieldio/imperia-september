@@ -23,5 +23,7 @@ declare module "@sapphire/framework" {
         guild: Guild;
     }
 
-    interface Preconditions {}
+    interface Preconditions {
+        DeveloperUserOnly: never;
+    }
 }

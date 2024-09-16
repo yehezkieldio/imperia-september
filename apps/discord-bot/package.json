@@ -5,13 +5,14 @@
     "main": "dist/main.js",
     "type": "module",
     "scripts": {
-        "build": "bun run scripts/build.ts --env-file ../../.env",
+        "build": "bun --env-file ../../.env tsup --format esm",
         "start": "bun --env-file ../../.env .",
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@imperia/environment": "workspace:*",
         "@imperia/logger": "workspace:*",
+        "@imperia/database": "workspace:*",
         "@imperia/stores": "workspace:*",
         "@sapphire/discord.js-utilities": "^7.3.0",
         "@sapphire/fetch": "^3.0.3",
@@ -29,6 +30,7 @@
         "@imperia/typescript": "workspace:*",
         "@types/bun": "latest",
         "@types/node": "latest",
+        "tsup": "^8.2.4",
         "typescript": "^5"
     },
     "imports": {
