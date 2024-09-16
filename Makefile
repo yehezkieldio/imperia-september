@@ -13,3 +13,6 @@ up:
 
 down:
 	docker compose --file $(DOCKER_COMPOSE_FILE) --env-file .env down
+
+logs:
+	docker compose --file $(DOCKER_COMPOSE_FILE) logs
