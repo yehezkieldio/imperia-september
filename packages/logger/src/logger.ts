@@ -1,5 +1,5 @@
 import { Timestamp } from "@sapphire/timestamp";
-import { blue, cyan, dim, greenBright, red, redBright, yellow } from "colorette";
+import { blue, bold, cyan, dim, greenBright, red, redBright, whiteBright, yellow } from "colorette";
 
 export enum LogLevel {
     Trace = 10,
@@ -72,6 +72,14 @@ export class ImperiaLogger implements ILogger {
 
     fatal(...values: readonly unknown[]): void {
         this.write(LogLevel.Fatal, ...values);
+    }
+
+    build(...values: readonly unknown[]): void {
+        if (typeof values[0] === "string" && !values[0].startsWith("dist")) {
+            console.log(`${redBright("TRN").padEnd(2)} ${values.join(" ")}`);
+        } else {
+            console.log(`${redBright("TRN").padEnd(2)} ${whiteBright(bold(values.join(" ")))}`);
+        }
     }
 
     /* -------------------------------------------------------------------------- */
