@@ -3,7 +3,7 @@ import type { CommandInteraction, Message } from "discord.js";
 import { DEVELOPERS } from "#lib/configuration";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
-export class DeveloperOnlyPrecondition extends Precondition {
+export class DeveloperUserOnlyPrecondition extends Precondition {
     public constructor(context: Precondition.LoaderContext, options: Precondition.Options) {
         super(context, {
             ...options,
