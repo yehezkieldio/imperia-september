@@ -23,6 +23,11 @@
         "**/.turbo": true,
         "**/dist": true
     },
-
-    "extensions.ignoreRecommendations": true
+    "extensions.ignoreRecommendations": true,
+    "i18n-ally.displayLanguage": "en-US",
+    "i18n-ally.localesPaths": ["apps/**/**/languages"],
+    "i18n-ally.pathMatcher": "{locale}/{namespaces}.json",
+    "i18n-ally.namespace": true,
+    "i18n-ally.preferredDelimiter": ":",
+    "i18n-ally.enabledFrameworks": ["sapphire-i18next"]
 }
