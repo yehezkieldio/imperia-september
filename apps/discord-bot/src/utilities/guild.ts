@@ -14,10 +14,10 @@ export class GuildUtility extends Utility {
         const settings = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
 
         if (settings.length === 0) {
-            return "imperia ";
+            return "imperia!";
         }
 
-        return settings[0]?.prefix ?? "imperia ";
+        return settings[0]?.prefix ?? "imperia!";
     }
 
     public async getLanguage(guildId: string): Promise<string> {

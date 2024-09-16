@@ -22,7 +22,7 @@ export const configuration: ImperiaClientOptions = {
         delay: Time.Second * 2,
         filteredUsers: DEVELOPERS,
     },
-    defaultPrefix: "imperia ",
+    defaultPrefix: "imperia!",
     intents: [
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.Guilds,
