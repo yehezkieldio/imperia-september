@@ -24,7 +24,7 @@ export default defineConfig({
     entry: ["src/**/*.ts", "!src/**/*.d.ts", "!src/**/*.test.ts*"],
     clean: true,
     sourcemap: process.env.NODE_ENV !== "production",
-    minify: true,
+    minify: process.env.NODE_ENV === "production",
     skipNodeModulesBundle: true,
     keepNames: true,
     tsconfig: "tsconfig.json",
