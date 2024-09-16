@@ -1,4 +1,5 @@
 import { type ChatInputCommandDeniedPayload, Listener, type UserError } from "@sapphire/framework";
+import { resolveKey } from "@sapphire/plugin-i18next";
 import { ImperiaEvents } from "#lib/extensions/constants/events";
 
 export class ChatInputCommadDeniedListener extends Listener {
@@ -11,7 +12,7 @@ export class ChatInputCommadDeniedListener extends Listener {
     }
 
     public async run(error: UserError, payload: ChatInputCommandDeniedPayload) {
-        const { logger, services } = this.container;
+        const { logger, services, utilities } = this.container;
         const { interaction } = payload;
 
         logger.debug(`ChatInputCommadDeniedListener: ${error.identifier}`);
@@ -20,13 +21,13 @@ export class ChatInputCommadDeniedListener extends Listener {
 
         if (interaction.deferred || interaction.replied) {
             return interaction.editReply({
-                content: response,
+                content: utilities.bot.isATranslationKey(response) ? await resolveKey(interaction, response) : response,
                 allowedMentions: { users: [interaction.user.id], roles: [] },
             });
         }
 
         return interaction.reply({
-            content: response,
+            content: utilities.bot.isATranslationKey(response) ? await resolveKey(interaction, response) : response,
             allowedMentions: { users: [interaction.user.id], roles: [] },
             ephemeral: true,
         });

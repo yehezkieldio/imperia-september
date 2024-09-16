@@ -1,5 +1,6 @@
 import { Service } from "@imperia/stores";
 import type { UserError } from "@sapphire/framework";
+import { i18next } from "@sapphire/plugin-i18next";
 
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
@@ -31,15 +32,15 @@ export class ResponseService extends Service {
         }
 
         if (error.identifier === ImperiaIdentifiers.CommandDisabled) {
-            return "This command is globally disabled! Please try again later...";
+            return i18next.t("response:command_disabled");
         }
 
         if (error.identifier === ImperiaIdentifiers.PreconditionCooldown) {
-            return "This command is on cooldown! Please wait for the cooldown to expire...";
+            return i18next.t("response:command_disabled");
         }
 
         if (error.identifier === ImperiaIdentifiers.PreconditionRunIn) {
-            return `This command is not available in this context! Please use this command in a ${getChannelType(error)}`;
+            return i18next.t("response:precondition_runin", { channel_type: getChannelType(error) });
         }
 
         /* ------------------------ PERMISSION PRECONDITIONS ------------------------ */
@@ -48,20 +49,20 @@ export class ResponseService extends Service {
             error.identifier === ImperiaIdentifiers.PreconditionClientPermissions ||
             error.identifier === ImperiaIdentifiers.PreconditionClientPermissionsNoPermissions
         ) {
-            return `I am missing required permissions to execute this command!\nRequired permission(s): ${getMissingPermissions(error)}`;
+            return i18next.t("response:missing_client_permissions", { permissions: getMissingPermissions(error) });
         }
 
         if (
             error.identifier === ImperiaIdentifiers.PreconditionUserPermissions ||
             error.identifier === ImperiaIdentifiers.PreconditionUserPermissionsNoPermissions
         ) {
-            return `You are missing required permissions to execute this command!\nRequired permission(s): ${getMissingPermissions(error)}`;
+            return i18next.t("response:missing_user_permissions", { permissions: getMissingPermissions(error) });
         }
 
         /* --------------------------------- DEFAULT -------------------------------- */
 
         this.container.logger.debug(error.message);
 
-        return "Unhandled error occurred while executing this command! Please contact a developer...";
+        return i18next.t("response:unhandled");
     }
 }

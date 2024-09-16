@@ -45,4 +45,8 @@ export class BotUtility extends Utility {
     public getGuildFromId = async (guildId: string) => {
         return await this.container.client.guilds.fetch(guildId);
     };
+
+    public isATranslationKey = (key: string) => {
+        return /^(\w+):(\w+)$/.test(key);
+    };
 }
