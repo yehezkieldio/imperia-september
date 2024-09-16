@@ -18,37 +18,27 @@ export const users = pgTable(
 
 /* ---------------------------------- GUILD --------------------------------- */
 
-export const guilds = pgTable(
-    "guild",
-    {
-        id: uuid("id").defaultRandom().primaryKey(),
-        discordId: varchar("discord_id").notNull(),
-    },
-    (guild) => ({
-        discordIdUidx: uniqueIndex("guild_discord_id_uidx").on(guild.discordId),
-    }),
-);
+export const guilds = pgTable("guild", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    discordId: varchar("discord_id").notNull().unique(),
+});
 
 export const guildsRelations = relations(guilds, ({ one }) => ({
-    settings: one(guildSettings),
+    guildSettings: one(guildSettings),
 }));
 
-export const guildSettings = pgTable(
-    "guild_setting",
-    {
-        id: uuid("id").defaultRandom().primaryKey(),
-        guildId: uuid("guild_id").references(() => guilds.id),
-        prefix: varchar("prefix").notNull().default("imperia!"),
-        language: varchar("language").notNull().default("en-US"),
-        disabledCommands: text("disabled_commands").array().notNull().default(sql`'{}'::text[]`),
-    },
-    (guildSettings) => ({
-        guildIdUidx: uniqueIndex("guild_setting_guild_id_uidx").on(guildSettings.guildId),
-    }),
-);
+export const guildSettings = pgTable("guild_setting", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    guildId: varchar("guild_id")
+        .references(() => guilds.discordId)
+        .unique(),
+    prefix: varchar("prefix").notNull().default("imperia!"),
+    language: varchar("language").notNull().default("en-US"),
+    disabledCommands: text("disabled_commands").array().notNull().default(sql`'{}'::text[]`),
+});
 
 export const guildSettingsRelations = relations(guildSettings, ({ one }) => ({
-    guild: one(guilds, { fields: [guildSettings.guildId], references: [guilds.id] }),
+    guild: one(guilds, { fields: [guildSettings.guildId], references: [guilds.discordId] }),
 }));
 
 /* -------------------------------------------------------------------------- */

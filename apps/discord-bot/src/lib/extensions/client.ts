@@ -1,5 +1,4 @@
-import { database, equal } from "@imperia/database";
-import { guildSettings } from "@imperia/database/schema";
+import {} from "@imperia/database";
 import { discordBotEnv } from "@imperia/environment/discord-bot";
 
 import {
@@ -33,9 +32,7 @@ export class ImperiaClient extends SapphireClient {
     public override fetchPrefix = async (context: Message | CommandInteraction): Promise<string> => {
         const guildId: string = context.guildId ?? (context.guild?.id as string);
 
-        const [settings] = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
-
-        return settings?.prefix ?? "imperia ";
+        return container.utilities.guild.getPrefix(guildId);
     };
 
     public override async login(token: string): Promise<string> {

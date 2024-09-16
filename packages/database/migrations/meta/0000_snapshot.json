@@ -1,5 +1,5 @@
 {
-  "id": "2fe6d88e-289f-4301-baee-ea70b43b770b",
+  "id": "8c59e450-e673-4e5c-bf8d-f43dafc5f3ef",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -69,7 +69,7 @@
         },
         "guild_id": {
           "name": "guild_id",
-          "type": "uuid",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -95,40 +95,32 @@
           "default": "'{}'::text[]"
         }
       },
-      "indexes": {
-        "guild_setting_guild_id_uidx": {
-          "name": "guild_setting_guild_id_uidx",
-          "columns": [
-            {
-              "expression": "guild_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
-        "guild_setting_guild_id_guild_id_fk": {
-          "name": "guild_setting_guild_id_guild_id_fk",
+        "guild_setting_guild_id_guild_discord_id_fk": {
+          "name": "guild_setting_guild_id_guild_discord_id_fk",
           "tableFrom": "guild_setting",
           "tableTo": "guild",
           "columnsFrom": [
             "guild_id"
           ],
           "columnsTo": [
-            "id"
+            "discord_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "guild_setting_guild_id_unique": {
+          "name": "guild_setting_guild_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "guild_id"
+          ]
+        }
+      }
     },
     "public.guild": {
       "name": "guild",
@@ -148,26 +140,18 @@
           "notNull": true
         }
       },
-      "indexes": {
-        "guild_discord_id_uidx": {
-          "name": "guild_discord_id_uidx",
-          "columns": [
-            {
-              "expression": "discord_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "guild_discord_id_unique": {
+          "name": "guild_discord_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "discord_id"
+          ]
+        }
+      }
     },
     "public.user": {
       "name": "user",

@@ -1,5 +1,4 @@
 import type { Guild } from "discord.js";
-
 import type { ResponseService } from "#services/response";
 import type { BotUtility } from "#utilities/bot";
 
@@ -10,6 +9,7 @@ declare module "@sapphire/pieces" {
 
     interface Utilities {
         bot: BotUtility;
+        guild: GuildUtility;
     }
 
     interface Container {

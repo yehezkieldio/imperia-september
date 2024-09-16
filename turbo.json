@@ -36,7 +36,8 @@
             "cache": false
         },
         "db:drop": {
-            "cache": false
+            "cache": false,
+            "interactive": true
         },
         "db:migrate": {
             "cache": false
