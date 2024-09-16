@@ -1,0 +1,24 @@
+services:
+  postgresql:
+    container_name: imperia-postgresql
+    image: postgres:latest
+    hostname: localhost
+    env_file:
+      - path: "../../.env"
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DOCKER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DOCKER_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DOCKER_POSTGRES_NAME}
+    restart: unless-stopped
+    volumes:
+      - ./data/pg:/var/lib/postgresql/data
+    networks:
+      - imperia-infrastructure
+networks:
+  imperia-infrastructure:
+    driver: bridge
+volumes:
+  pg:
+    driver: local

@@ -1,0 +1,28 @@
+{
+    "name": "@imperia/database",
+    "private": true,
+    "scripts": {
+        "db:push": "bun --env-file ../../.env drizzle-kit push",
+        "db:studio": "bun --env-file ../../.env drizzle-kit studio",
+        "db:generate": "bun --env-file ../../.env drizzle-kit generate",
+        "db:drop": "bun --env-file ../../.env drizzle-kit drop",
+        "db:migrate": "bun --env-file ../../.env drizzle-kit migrate",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@imperia/environment": "workspace:*",
+        "drizzle-orm": "^0.33.0",
+        "postgres": "^3.4.4"
+    },
+    "devDependencies": {
+        "@imperia/typescript": "workspace:*",
+        "@types/bun": "latest",
+        "@types/node": "latest",
+        "drizzle-kit": "^0.24.2",
+        "typescript": "^5"
+    },
+    "exports": {
+        ".": "./src/db.ts",
+        "./schema": "./src/schema.ts"
+    }
+}

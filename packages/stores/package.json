@@ -1,5 +1,6 @@
 {
     "name": "@imperia/stores",
+    "private": true,
     "scripts": {
         "typecheck": "tsc --noEmit"
     },
