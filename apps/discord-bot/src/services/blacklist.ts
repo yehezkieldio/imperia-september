@@ -55,7 +55,7 @@ export class BlacklistService extends Service {
             .from(blacklistEntities)
             .where(equal(blacklistEntities.entityId, userId));
 
-        return !!user;
+        return !!user.length;
     }
 
     public async isServerBlacklisted(guildId: string): Promise<boolean> {
@@ -64,7 +64,7 @@ export class BlacklistService extends Service {
             .from(blacklistEntities)
             .where(equal(blacklistEntities.entityId, guildId));
 
-        return !!server;
+        return !!server.length;
     }
 
     public async create(newEntity: BlacklistEntities): Promise<void> {
