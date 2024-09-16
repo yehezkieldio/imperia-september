@@ -56,14 +56,16 @@ export default defineConfig({
 
         const jsonFiles: string[] = findJSONFiles(srcDir);
 
-        logger.build("Copying translation files...");
+        logger.tsup("TRN", "Copying translation files...");
         for (const jsonFile of jsonFiles) {
             const relativePath = path.relative(srcDir, jsonFile);
             const destPath = path.join(destDir, relativePath);
 
             copyFile(jsonFile, destPath);
 
-            logger.build(`${"dist/"}${destPath.split("dist/")[1]}`);
+            logger.tsup("TRN", `${"dist/"}${destPath.split("dist/")[1]}`);
         }
+
+        logger.tsup("TRN", "Translation files copied.");
     },
 });
