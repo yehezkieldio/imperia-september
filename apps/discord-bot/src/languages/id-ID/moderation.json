@@ -1,0 +1,9 @@
+{
+    "already_banned": "Pengguna ini sudah dilarang dari server ini!",
+    "not_banned": "Pengguna ini tidak dilarang dari server ini!",
+    "self_action": "Saya tidak bisa {{action}} diri saya sendiri.",
+    "owner_action": "Anda tidak bisa {{action}} pemilik server.",
+    "hierarchy_action": "Anda tidak bisa {{action}} pengguna dengan role yang sama atau lebih tinggi dari Anda.",
+    "denied_action": "Saya tidak bisa {{action}} pengguna ini.",
+    "cant_ban": "Saya tidak bisa melarang pengguna ini."
+}

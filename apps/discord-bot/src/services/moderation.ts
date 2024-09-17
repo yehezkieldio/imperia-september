@@ -1,6 +1,7 @@
 import { Service } from "@imperia/stores";
 
 import { UserError } from "@sapphire/framework";
+import type { TFunction } from "@sapphire/plugin-i18next";
 import type { Collection, Guild, GuildBan, GuildMember } from "discord.js";
 
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
@@ -42,79 +43,109 @@ export class ModerationService extends Service {
 
     /* -------------------------------------------------------------------------- */
 
-    private async ensureUserIsNotBanned(guild: ChatMessageContext["guild"], targetUser: GuildMember): Promise<void> {
+    private async ensureUserIsNotBanned(
+        resolveKey: TFunction<"translation", undefined>,
+        guild: ChatMessageContext["guild"],
+        targetUser: GuildMember,
+    ): Promise<void> {
         const bans = await this.fetchBans(guild);
 
         if (bans.has(targetUser.id)) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: "This user is already banned.",
+                message: resolveKey("moderation:already_banned"),
             });
         }
     }
 
-    private async ensureUserIsBanned(guild: ChatMessageContext["guild"], targetUser: GuildMember): Promise<void> {
+    private async ensureUserIsBanned(
+        resolveKey: TFunction<"translation", undefined>,
+        guild: ChatMessageContext["guild"],
+        targetUser: GuildMember,
+    ): Promise<void> {
         const bans = await this.fetchBans(guild);
 
         if (!bans.has(targetUser.id)) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: "This user is not banned.",
+                message: resolveKey("moderation:not_banned"),
             });
         }
     }
 
-    private async ensureUserIsValid(guild: Guild, userId: string, action: Action): Promise<void> {
+    private async ensureUserIsValid(
+        resolveKey: TFunction<"translation", undefined>,
+        guild: Guild,
+        userId: string,
+        action: Action,
+    ): Promise<void> {
         if (userId === this.container.client.id) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: `I cannot ${action} myself.`,
+                message: resolveKey("moderation:self_action", {
+                    action: action,
+                }),
             });
         }
 
         if (userId === guild.ownerId) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: `You cannot ${action} the server owner.`,
+                message: resolveKey("moderation:owner_action", {
+                    action: action,
+                }),
             });
         }
     }
 
-    private async ensureRoleHierarchy(executor: GuildMember, targetUser: GuildMember, action: Omit<Action, "unban">) {
+    private async ensureRoleHierarchy(
+        resolveKey: TFunction<"translation", undefined>,
+        executor: GuildMember,
+        targetUser: GuildMember,
+        action: Omit<Action, "unban">,
+    ) {
         if (targetUser.roles.highest.position >= executor.roles.highest.position) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: `You cannot ${action} a user with an equal or higher role than yours.`,
+                message: resolveKey("moderation:hierarchy_action", {
+                    action: action,
+                }),
             });
         }
     }
 
     /* -------------------------------------------------------------------------- */
 
-    private async ensureActionIsValid(targetUser: GuildMember, action: Action): Promise<void> {
+    private async ensureActionIsValid(
+        resolveKey: TFunction<"translation", undefined>,
+        targetUser: GuildMember,
+        action: Action,
+    ): Promise<void> {
         if (action === "kick") {
             if (!targetUser.kickable) {
                 throw new UserError({
                     identifier: ImperiaIdentifiers.CommandServiceError,
-                    message: `I cannot ${action} this user.`,
+                    message: resolveKey("moderation:denied_action", {
+                        action: action,
+                    }),
                 });
             }
             return;
         }
 
         if (action === "ban") {
-            await this.ensureUserIsNotBanned(targetUser.guild, targetUser);
+            await this.ensureUserIsNotBanned(resolveKey, targetUser.guild, targetUser);
             if (!targetUser.bannable) {
                 throw new UserError({
                     identifier: ImperiaIdentifiers.CommandServiceError,
-                    message: "I cannot ban this user.",
+                    message: resolveKey("moderation:cant_ban"),
                 });
             }
             return;
         }
 
         if (action === "unban") {
-            await this.ensureUserIsBanned(targetUser.guild, targetUser);
+            await this.ensureUserIsBanned(resolveKey, targetUser.guild, targetUser);
         }
     }
 
@@ -123,14 +154,18 @@ export class ModerationService extends Service {
         context: MakeOptional<ModerationActionContext, "targetUserId" | "targetUser">,
         action: Action,
     ): Promise<void> {
+        if (!guild) return;
+
+        const resolveKey = await this.container.utilities.bot.getResolveKey(guild.id);
+
         if (context.targetUserId && action === "unban") {
-            await this.ensureUserIsValid(guild, context.targetUserId, "unban");
+            await this.ensureUserIsValid(resolveKey, guild, context.targetUserId, "unban");
         }
 
         if (context.targetUser) {
-            await this.ensureUserIsValid(guild, context.targetUser.id, action);
-            await this.ensureRoleHierarchy(context.executor, context.targetUser, action);
-            await this.ensureActionIsValid(context.executor, action);
+            await this.ensureUserIsValid(resolveKey, guild, context.targetUser.id, action);
+            await this.ensureRoleHierarchy(resolveKey, context.executor, context.targetUser, action);
+            await this.ensureActionIsValid(resolveKey, context.executor, action);
         }
     }
 

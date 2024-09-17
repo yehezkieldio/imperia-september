@@ -1,0 +1,9 @@
+{
+    "already_banned": "This user is already banned from this server!",
+    "not_banned": "This user is not banned from this server!",
+    "self_action": "I cannot {{action}} myself.",
+    "owner_action": "You cannot {{action}} the server owner.",
+    "hierarchy_action": "You cannot {{action}} a user with an equal or higher role than yours.",
+    "denied_action": "I cannot {{action}} this user.",
+    "cant_ban": "I cannot ban this user."
+}
