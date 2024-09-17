@@ -5,11 +5,12 @@ import { DEVELOPMENT_SERVERS } from "#lib/configuration";
 import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
-export class DisabledCommand extends ImperiaCommand {
+export class ErrorDisabledCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
         super(context, {
             ...options,
-            description: "A disabled command, for testing purposes.",
+            description: "A command that fire up an command disabled error to simulate a disabled command.",
+            preconditions: ["DeveloperUserOnly"],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
     }
@@ -27,14 +28,12 @@ export class DisabledCommand extends ImperiaCommand {
     public async chatInputRun(interaction: ImperiaCommand.ChatInputCommandInteraction) {
         throw new UserError({
             identifier: ImperiaIdentifiers.CommandDisabled,
-            message: "This command is disabled.",
         });
     }
 
     public async messageRun(message: Message) {
         throw new UserError({
             identifier: ImperiaIdentifiers.CommandDisabled,
-            message: "This command is disabled.",
         });
     }
 }
