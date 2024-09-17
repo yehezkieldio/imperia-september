@@ -13,12 +13,12 @@ export function mapToLanguageArray(map: Map<string, string> = languageMap): { na
     return result;
 }
 
-export function resolveLanguageCode(languageCode: string): Result<string, string> {
-    const language: string | undefined = languageMap.get(languageCode);
+export const languageCodes = Array.from(languageMap.keys()).join(", ");
 
-    if (!language) {
-        return Result.ok([...languageMap.keys()].join(", "));
+export function resolveLanguageCode(languageCode: string): Result<string, string> {
+    if (languageMap.has(languageCode)) {
+        return Result.ok(languageCode);
     }
 
-    return Result.ok(languageCode);
+    return Result.err(languageCodes);
 }

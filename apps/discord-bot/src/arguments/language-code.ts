@@ -11,7 +11,7 @@ export class LanguageArgument extends Argument<string> {
         const language: Result<string, string> = resolveLanguageCode(argument);
 
         if (language.isErr()) {
-            throw this.error({
+            return this.error({
                 context,
                 parameter: argument,
                 message: language.unwrapErr(),

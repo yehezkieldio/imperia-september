@@ -1,10 +1,16 @@
-import { type Args, CommandOptionsRunTypeEnum, type ResultType, UserError } from "@sapphire/framework";
+import {
+    type Args,
+    type ArgumentError,
+    CommandOptionsRunTypeEnum,
+    type ResultType,
+    UserError,
+} from "@sapphire/framework";
 import { type Message, SlashCommandBuilder } from "discord.js";
 
 import { resolveKey } from "@sapphire/plugin-i18next";
 import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
-import { mapToLanguageArray } from "#lib/resolvers/language-code";
+import { languageCodes, mapToLanguageArray } from "#lib/resolvers/language-code";
 
 export class LanguageCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
@@ -34,8 +40,6 @@ export class LanguageCommand extends ImperiaCommand {
     /* -------------------------------------------------------------------------- */
 
     public async chatInputRun(interaction: ImperiaCommand.ChatInputCommandInteraction) {
-        const languageCode: string = interaction.options.getString("language_code", true);
-
         if (!interaction.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
@@ -43,6 +47,9 @@ export class LanguageCommand extends ImperiaCommand {
             });
         }
 
+        /* -------------------------------------------------------------------------- */
+
+        const languageCode: string = interaction.options.getString("language_code", true);
         const currentLanguage: string = await this.container.utilities.guild.getLanguage(interaction.guild.id);
 
         if (currentLanguage === languageCode) {
@@ -63,22 +70,40 @@ export class LanguageCommand extends ImperiaCommand {
     }
 
     public async messageRun(message: Message, args: Args) {
-        const languageCodeArgument: ResultType<string> = await args.pickResult("languageCode");
-        if (languageCodeArgument.isErr()) {
-            throw new UserError({
-                identifier: ImperiaIdentifiers.ArgsMissing,
-                message: await resolveKey(message, "response:invalid_language", {
-                    languages: languageCodeArgument.unwrapErr(),
-                }),
-            });
-        }
-
         if (!message.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
                 message: await resolveKey(message, "response:server_only"),
             });
         }
+
+        /* -------------------------------------------------------------------------- */
+
+        const languageCodeArgument: ResultType<string> = await args.pickResult("languageCode");
+
+        if (languageCodeArgument.isErr()) {
+            const error: UserError | ArgumentError<string> = languageCodeArgument.unwrapErr();
+
+            // If the argument provided is invalid, we'll throw an error.
+            if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
+                throw new UserError({
+                    identifier: ImperiaIdentifiers.ArgsMissing,
+                    message: await resolveKey(message, "language:invalid_language", {
+                        languages: error.message,
+                    }),
+                });
+            }
+
+            // If the argument provided is missing, we'll throw an error.
+            throw new UserError({
+                identifier: ImperiaIdentifiers.ArgsMissing,
+                message: await resolveKey(message, "language:no_language", {
+                    languages: languageCodes,
+                }),
+            });
+        }
+
+        /* -------------------------------------------------------------------------- */
 
         const currentLanguage: string = await this.container.utilities.guild.getLanguage(message.guild.id);
         const languageCode = languageCodeArgument.unwrap();
