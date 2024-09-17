@@ -1,0 +1,4 @@
+{
+    "invalid_time": "Invalid time provided. Please provide a valid time.",
+    "older_seven": "The time provided is older than 7 days. Please provide a time within 7 days."
+}

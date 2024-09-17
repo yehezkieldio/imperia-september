@@ -14,6 +14,9 @@ enum Identifiers {
 
     /* ------------------------------ SERVICE ERROR ----------------------------- */
     ServiceError = "serviceError",
+
+    /* ------------------------------ ARGUMENT ERROR ----------------------------- */
+    ArgumentTimeExpressionError = "timeExpressionError",
 }
 
 export const ImperiaIdentifiers = {

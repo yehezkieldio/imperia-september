@@ -14,17 +14,7 @@ export class TimeExpressionArgument extends Argument<number> {
             return this.error({
                 context,
                 parameter: argument,
-                message: "Invalid date provided.",
-                identifier: ImperiaIdentifiers.CommandServiceError,
-            });
-        }
-
-        if (seconds.unwrap() > 604800) {
-            return this.error({
-                context,
-                parameter: argument,
-                message: "You cannot clear messages older than 7 days.",
-                identifier: ImperiaIdentifiers.CommandServiceError,
+                identifier: ImperiaIdentifiers.ArgumentTimeExpressionError,
             });
         }
 
