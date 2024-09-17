@@ -1,5 +1,5 @@
 import { Service } from "@imperia/stores";
-import type { UserError } from "@sapphire/framework";
+import { ArgumentError, UserError } from "@sapphire/framework";
 
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
@@ -9,6 +9,33 @@ export class ResponseService extends Service {
             ...options,
             name: "response",
         });
+    }
+
+    public async commandError(guildId: string, error: Error): Promise<string> {
+        const languageCode = await this.container.utilities.guild.getLanguage(guildId);
+        const resolveKey = this.container.i18n.getT(languageCode);
+
+        if (error instanceof UserError) {
+            if (error.identifier === ImperiaIdentifiers.ArgsMissing) {
+                return error.message;
+            }
+
+            if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
+                return error.message;
+            }
+        }
+
+        if (error instanceof ArgumentError) {
+            this.container.logger.debug(error.message);
+
+            return resolveKey("response:argument_error");
+        }
+
+        /* --------------------------------- DEFAULT -------------------------------- */
+
+        this.container.logger.debug(error.message);
+
+        return resolveKey("response:unhandled");
     }
 
     public async commandDenied(guildId: string, error: UserError): Promise<string> {

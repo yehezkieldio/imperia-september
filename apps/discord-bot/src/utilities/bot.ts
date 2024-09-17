@@ -1,6 +1,14 @@
 import { Utility } from "@imperia/stores";
 import type { UserError } from "@sapphire/framework";
-import { ChannelType, type Guild, chatInputApplicationCommandMention, inlineCode } from "discord.js";
+import { resolveKey } from "@sapphire/plugin-i18next";
+import {
+    ChannelType,
+    type CommandInteraction,
+    type Guild,
+    type Message,
+    chatInputApplicationCommandMention,
+    inlineCode,
+} from "discord.js";
 
 export class BotUtility extends Utility {
     public constructor(context: Utility.LoaderContext, options: Utility.Options) {
@@ -47,6 +55,15 @@ export class BotUtility extends Utility {
     };
 
     public isATranslationKey = (key: string) => {
+        /**
+         * We check if a response string contains a colon, which is the separator for translation keys.
+         * Example: `response:server_only`
+         * If it does, we assume it's a translation key.
+         */
         return /^(\w+):(\w+)$/.test(key);
     };
+
+    public getResponse(response: string, messageOrInteraction: Message | CommandInteraction) {
+        return this.isATranslationKey(response) ? resolveKey(messageOrInteraction, response) : response;
+    }
 }

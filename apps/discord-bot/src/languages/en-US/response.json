@@ -7,5 +7,6 @@
     "command_run": "This command is not available in this context! Please use this command in a {{channel_type}}",
     "missing_client_permissions": "I am missing required permissions to execute this command!\nRequired permission(s): {{permissions}}",
     "missing_user_permissions": "You are missing required permissions to execute this command!\nRequired permission(s): {{permissions}}",
+    "argument_error": "An error occurred while parsing arguments for this command!",
     "unhandled": "Unhandled error occurred while executing this command! Please contact a developer..."
 }

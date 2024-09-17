@@ -1,6 +1,5 @@
 import { ArgumentError, Listener, type MessageCommandErrorPayload, UserError } from "@sapphire/framework";
 import { ImperiaEvents } from "#lib/extensions/constants/events";
-import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
 export class MessageCommandErrorListener extends Listener {
     public constructor(context: Listener.LoaderContext, options: Listener.Options) {
@@ -12,42 +11,21 @@ export class MessageCommandErrorListener extends Listener {
     }
 
     public async run(error: Error, payload: MessageCommandErrorPayload) {
-        this.container.logger.debug(`MessageCommandErrorListener: ${error.name}\n- ${error}`);
+        const { message } = payload;
+        if (!message.guildId) return;
 
         if (error instanceof UserError) {
-            return this.userError(error, payload);
+            this.container.logger.debug(`MessageCommandErrorListener: UserError ${error.identifier}`);
         }
 
         if (error instanceof ArgumentError) {
-            return this.argumentError(error, payload);
-        }
-    }
-
-    private async userError(error: UserError, payload: MessageCommandErrorPayload) {
-        this.container.logger.debug(`MessageCommandErrorListener: ${error.identifier}`);
-
-        if (error.identifier === ImperiaIdentifiers.ArgsMissing) {
-            return payload.message.reply({
-                content: error.message,
-            });
+            this.container.logger.debug(`MessageCommandErrorListener: ArgumentError ${error.identifier}`);
         }
 
-        if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
-            return payload.message.reply({
-                content: error.message,
-            });
-        }
+        const response: string = await this.container.services.response.commandError(message.guildId, error);
 
-        return payload.message.reply({
-            content: error.message,
-        });
-    }
-
-    private async argumentError(error: ArgumentError, payload: MessageCommandErrorPayload) {
-        this.container.logger.debug(`MessageCommandErrorListener: ${error.identifier}`);
-
-        return payload.message.reply({
-            content: error.message,
+        return message.reply({
+            content: await this.container.utilities.bot.getResponse(response, message),
         });
     }
 }
