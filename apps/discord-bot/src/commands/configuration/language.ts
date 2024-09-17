@@ -1,6 +1,7 @@
 import { type Args, CommandOptionsRunTypeEnum, type ResultType, UserError } from "@sapphire/framework";
 import { type Message, SlashCommandBuilder } from "discord.js";
 
+import { resolveKey } from "@sapphire/plugin-i18next";
 import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 import { mapToLanguageArray } from "#lib/resolvers/language-code";
@@ -38,17 +39,27 @@ export class LanguageCommand extends ImperiaCommand {
         if (!interaction.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: "This command can only be used in a server.",
+                message: await resolveKey(interaction, "response:server_only"),
             });
         }
 
         const currentLanguage: string = await this.container.utilities.guild.getLanguage(interaction.guild.id);
 
         if (currentLanguage === languageCode) {
-            return interaction.reply(`Language already set to ${languageCode}`);
+            return interaction.reply({
+                content: await resolveKey(interaction, "language:already_set", {
+                    language: languageCode,
+                }),
+            });
         }
 
-        return interaction.reply(`Language set to ${languageCode}`);
+        await this.container.utilities.guild.setLanguage(interaction.guild.id, languageCode);
+
+        return interaction.reply({
+            content: await resolveKey(interaction, "language:set", {
+                language: languageCode,
+            }),
+        });
     }
 
     public async messageRun(message: Message, args: Args) {
@@ -56,14 +67,16 @@ export class LanguageCommand extends ImperiaCommand {
         if (languageCodeArgument.isErr()) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.ArgsMissing,
-                message: "Invalid language provided.",
+                message: await resolveKey(message, "response:invalid_language", {
+                    languages: languageCodeArgument.unwrapErr(),
+                }),
             });
         }
 
         if (!message.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: "This command can only be used in a server.",
+                message: await resolveKey(message, "response:server_only"),
             });
         }
 
@@ -71,9 +84,19 @@ export class LanguageCommand extends ImperiaCommand {
         const languageCode = languageCodeArgument.unwrap();
 
         if (currentLanguage === languageCode) {
-            return message.reply(`Language already set to ${languageCode}`);
+            return message.reply({
+                content: await resolveKey(message, "language:already_set", {
+                    language: languageCode,
+                }),
+            });
         }
 
-        return message.reply(`Language set to ${languageCode}`);
+        await this.container.utilities.guild.setLanguage(message.guild.id, languageCode);
+
+        return message.reply({
+            content: await resolveKey(message, "language:set", {
+                language: languageCode,
+            }),
+        });
     }
 }

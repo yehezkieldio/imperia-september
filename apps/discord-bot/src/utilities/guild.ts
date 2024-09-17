@@ -29,4 +29,8 @@ export class GuildUtility extends Utility {
 
         return settings[0]?.language ?? "en-US";
     }
+
+    public async setLanguage(guildId: string, language: string): Promise<void> {
+        await database.update(guildSettings).set({ language }).where(equal(guildSettings.guildId, guildId));
+    }
 }

@@ -10,11 +10,11 @@ export class LanguageArgument extends Argument<string> {
     public run(argument: string, context: Argument.Context): Argument.Result<string> {
         const language: Result<string, string> = resolveLanguageCode(argument);
 
-        if (!language) {
+        if (language.isErr()) {
             return this.error({
                 context,
                 parameter: argument,
-                message: "Invalid language provided.",
+                message: language.unwrapErr(),
                 identifier: ImperiaIdentifiers.CommandServiceError,
             });
         }
