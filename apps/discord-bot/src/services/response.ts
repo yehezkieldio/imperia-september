@@ -54,6 +54,10 @@ export class ResponseService extends Service {
             return error.message;
         }
 
+        if (error.identifier === ImperiaIdentifiers.DeveloperUserOnly) {
+            return resolveKey("response:developer_only");
+        }
+
         /* -------------------------- GENERAL PRECONDITIONS -------------------------- */
 
         if (error.identifier === ImperiaIdentifiers.InvalidArgumentProvided) {

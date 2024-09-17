@@ -8,5 +8,6 @@
     "missing_client_permissions": "I am missing required permissions to execute this command!\nRequired permission(s): {{permissions}}",
     "missing_user_permissions": "You are missing required permissions to execute this command!\nRequired permission(s): {{permissions}}",
     "argument_error": "An error occurred while parsing arguments for this command!",
-    "unhandled": "Unhandled error occurred while executing this command! Please contact a developer..."
+    "unhandled": "Unhandled error occurred while executing this command! Please contact a developer...",
+    "developer_only": "This command is restricted to developers only!"
 }

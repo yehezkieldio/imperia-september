@@ -8,5 +8,6 @@
     "missing_client_permissions": "Saya tidak memiliki izin yang diperlukan untuk menjalankan perintah ini!\nIzin yang diperlukan: {{permissions}}",
     "missing_user_permissions": "Anda kehilangan izin yang diperlukan untuk menjalankan perintah ini!\nIzin yang diperlukan: {{permissions}}",
     "argument_error": "Terjadi kesalahan saat mengurai argumen untuk perintah ini!",
-    "unhandled": "Terjadi kesalahan yang tidak tertangani saat menjalankan perintah ini! Silakan hubungi pengembang..."
+    "unhandled": "Terjadi kesalahan yang tidak tertangani saat menjalankan perintah ini! Silakan hubungi pengembang...",
+    "developer_only": "Perintah ini dibatasi hanya untuk pengembang!"
 }

@@ -25,7 +25,6 @@ export class DeveloperUserOnlyPrecondition extends Precondition {
         return DEVELOPERS.includes(userId)
             ? this.ok()
             : this.error({
-                  message: "This command is restricted to developers only!",
                   identifier: ImperiaIdentifiers.DeveloperUserOnly,
               });
     }
