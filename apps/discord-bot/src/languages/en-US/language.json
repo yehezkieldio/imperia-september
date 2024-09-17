@@ -1,4 +1,5 @@
 {
+    "list_languages": "Available languages: {{languages}}",
     "invalid_language": "Invalid language. Available languages: {{languages}}",
     "no_language": "No language provided. Available languages: {{languages}}",
     "already_set": "Langauge is already set to {{language}}",
