@@ -1,6 +1,11 @@
 import { database, equal } from "@imperia/database";
-import { guildSettings } from "@imperia/database/schema";
+import { guildSettings, guilds } from "@imperia/database/schema";
 import { Utility } from "@imperia/stores";
+import { UserError } from "@sapphire/framework";
+import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
+
+type SelectGuildSettings = typeof guildSettings.$inferSelect;
+export type GuildSettings = Omit<SelectGuildSettings, "id">;
 
 export class GuildUtility extends Utility {
     public constructor(context: Utility.LoaderContext, options: Utility.Options) {
@@ -10,24 +15,76 @@ export class GuildUtility extends Utility {
         });
     }
 
-    public async getPrefix(guildId: string): Promise<string> {
-        const settings = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
+    public async create(guildId: string): Promise<void> {
+        await database.transaction(async (tx) => {
+            await tx.insert(guilds).values({
+                discordId: guildId,
+            });
 
-        if (settings.length === 0) {
-            return "imperia!";
-        }
-
-        return settings[0]?.prefix ?? "imperia!";
+            await tx.insert(guildSettings).values({
+                guildId,
+            });
+        });
     }
 
-    public async getLanguage(guildId: string): Promise<string> {
-        const settings = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
+    public async delete(guildId: string): Promise<void> {
+        await database.transaction(async (tx) => {
+            await tx.delete(guilds).where(equal(guilds.discordId, guildId));
+            await tx.delete(guildSettings).where(equal(guildSettings.guildId, guildId));
+        });
+    }
 
-        if (settings.length === 0) {
+    public async exists(guildId: string): Promise<boolean> {
+        const guild = await database.select().from(guilds).where(equal(guilds.discordId, guildId));
+
+        return guild.length > 0;
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    public async getSettings(guildId: string): Promise<GuildSettings> {
+        const [settings] = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
+
+        if (!settings) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: "Failed to get guild settings.",
+            });
+        }
+
+        return settings;
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    public async getPrefix(guildId: string): Promise<string> {
+        const settings: GuildSettings = await this.getSettings(guildId);
+
+        if (!settings.prefix) {
+            return (
+                typeof this.container.client.options.defaultPrefix === "string"
+                    ? this.container.client.options.defaultPrefix
+                    : "imperia!"
+            ) as string;
+        }
+
+        return settings.prefix;
+    }
+
+    public async setPrefix(guildId: string, prefix: string): Promise<void> {
+        await database.update(guildSettings).set({ prefix }).where(equal(guildSettings.guildId, guildId));
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    public async getLanguage(guildId: string): Promise<string> {
+        const settings: GuildSettings = await this.getSettings(guildId);
+
+        if (!settings.prefix) {
             return "en-US";
         }
 
-        return settings[0]?.language ?? "en-US";
+        return settings.prefix;
     }
 
     public async setLanguage(guildId: string, language: string): Promise<void> {
