@@ -10,7 +10,7 @@ export class ErrorDisabledCommand extends ImperiaCommand {
         super(context, {
             ...options,
             description: "A command that fire up an command disabled error to simulate a disabled command.",
-            preconditions: ["DeveloperUserOnly"],
+            preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
     }

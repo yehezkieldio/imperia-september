@@ -2,13 +2,14 @@ import { CommandOptionsRunTypeEnum } from "@sapphire/framework";
 import type { Message } from "discord.js";
 import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaEvents } from "#lib/extensions/constants/events";
+import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
 export class CheckGuildCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
         super(context, {
             ...options,
             description: "A command that fire up an guild join event to simulate a guild join event.",
-            preconditions: ["DeveloperUserOnly"],
+            preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
     }

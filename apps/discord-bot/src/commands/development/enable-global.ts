@@ -11,7 +11,7 @@ export class DisableGlobalCommand extends ImperiaCommand {
         super(context, {
             ...options,
             description: "Disable a command globally, will reset after a bot restart.",
-            preconditions: ["DeveloperUserOnly"],
+            preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
     }

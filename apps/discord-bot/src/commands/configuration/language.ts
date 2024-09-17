@@ -5,7 +5,7 @@ import {
     type ResultType,
     UserError,
 } from "@sapphire/framework";
-import { type Message, SlashCommandBuilder } from "discord.js";
+import { type Message, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 
 import { resolveKey } from "@sapphire/plugin-i18next";
 import { ImperiaCommand } from "#lib/extensions/command";
@@ -17,6 +17,7 @@ export class LanguageCommand extends ImperiaCommand {
         super(context, {
             ...options,
             description: "Change the bot's language, for this server.",
+            requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
             tags: ["preferences"],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
