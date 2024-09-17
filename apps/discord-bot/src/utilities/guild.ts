@@ -80,14 +80,26 @@ export class GuildUtility extends Utility {
     public async getLanguage(guildId: string): Promise<string> {
         const settings: GuildSettings = await this.getSettings(guildId);
 
-        if (!settings.prefix) {
+        if (!settings.language) {
             return "en-US";
         }
 
-        return settings.prefix;
+        return settings.language;
     }
 
     public async setLanguage(guildId: string, language: string): Promise<void> {
         await database.update(guildSettings).set({ language }).where(equal(guildSettings.guildId, guildId));
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    public async getDisabledCommands(guildId: string): Promise<string[]> {
+        const settings: GuildSettings = await this.getSettings(guildId);
+
+        if (!settings.disabledCommands) {
+            return [];
+        }
+
+        return settings.disabledCommands;
     }
 }

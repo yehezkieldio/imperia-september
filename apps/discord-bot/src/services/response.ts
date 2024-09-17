@@ -56,6 +56,10 @@ export class ResponseService extends Service {
             return resolveKey("response:developer_only");
         }
 
+        if (error.identifier === ImperiaIdentifiers.CommandGuildDisabled) {
+            return resolveKey("response:command_guild_disabled");
+        }
+
         /* -------------------------- GENERAL PRECONDITIONS -------------------------- */
 
         if (error.identifier === ImperiaIdentifiers.InvalidArgumentProvided) {

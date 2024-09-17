@@ -73,4 +73,20 @@ export class BotUtility extends Utility {
     public getResponse(response: string, messageOrInteraction: Message | CommandInteraction) {
         return this.isATranslationKey(response) ? resolveKey(messageOrInteraction, response) : response;
     }
+
+    public async getCommandFromContent(content: Message) {
+        if (!content.guildId) return undefined;
+
+        const prefix = await this.container.utilities.guild.getPrefix(content.guildId);
+
+        /**
+         * If the message doesn't start with the prefix, we return null.
+         * This means the message doesn't contain a command.
+         * Example: `imperia!ping` -> `ping`
+         *
+         * TODO: Should extensively test with various prefixes, as prefixes can be anything.
+         */
+        if (!content.content.startsWith(prefix)) return undefined;
+        return content.content.slice(prefix.length).trim().split(" ")[0];
+    }
 }

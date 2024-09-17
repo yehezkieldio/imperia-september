@@ -7,6 +7,7 @@ enum Identifiers {
     DeveloperUserOnly = "DeveloperUserOnly",
     ServerBlacklisted = "ServerBlacklisted",
     UserBlacklisted = "UserBlacklisted",
+    CommandGuildDisabled = "CommandGuildDisabled",
 
     /* ------------------------------ COMMAND ERROR ----------------------------- */
     InvalidArgumentProvided = "invalidArgumentProvided",

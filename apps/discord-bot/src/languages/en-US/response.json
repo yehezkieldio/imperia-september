@@ -3,6 +3,7 @@
     "server_blacklisted": "This server is blacklisted! I cannot execute commands in this server...",
     "user_blacklisted": "You are blacklisted! You cannot execute commands...",
     "command_disabled": "This command is globally disabled! Please try again later...",
+    "command_guild_disabled": "This command is disabled in this server! Contact a server administrator for more information...",
     "command_cooldown": "This command is on cooldown! Please wait for the cooldown to expire...",
     "command_run": "This command is not available in this context! Please use this command in a {{channel_type}}",
     "missing_client_permissions": "I am missing required permissions to execute this command!\nRequired permission(s): {{permissions}}",
