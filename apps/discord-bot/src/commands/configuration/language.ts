@@ -19,7 +19,13 @@ export class LanguageCommand extends ImperiaCommand {
         const command = new SlashCommandBuilder()
             .setName(this.name)
             .setDescription(this.description)
-            .addStringOption((option) => option.setChoices(mapToLanguageArray()));
+            .addStringOption((option) =>
+                option
+                    .setName("language_code")
+                    .setDescription("The language code to set the bot to.")
+                    .addChoices(mapToLanguageArray())
+                    .setRequired(true),
+            );
 
         void registry.registerChatInputCommand(command);
     }
@@ -27,7 +33,20 @@ export class LanguageCommand extends ImperiaCommand {
     /* -------------------------------------------------------------------------- */
 
     public async chatInputRun(interaction: ImperiaCommand.ChatInputCommandInteraction) {
-        const languageCode = interaction.options.getString("languageCode", true);
+        const languageCode: string = interaction.options.getString("language_code", true);
+
+        if (!interaction.guild) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: "This command can only be used in a server.",
+            });
+        }
+
+        const currentLanguage: string = await this.container.utilities.guild.getLanguage(interaction.guild.id);
+
+        if (currentLanguage === languageCode) {
+            return interaction.reply(`Language already set to ${languageCode}`);
+        }
 
         return interaction.reply(`Language set to ${languageCode}`);
     }
@@ -41,7 +60,20 @@ export class LanguageCommand extends ImperiaCommand {
             });
         }
 
+        if (!message.guild) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: "This command can only be used in a server.",
+            });
+        }
+
+        const currentLanguage: string = await this.container.utilities.guild.getLanguage(message.guild.id);
         const languageCode = languageCodeArgument.unwrap();
+
+        if (currentLanguage === languageCode) {
+            return message.reply(`Language already set to ${languageCode}`);
+        }
+
         return message.reply(`Language set to ${languageCode}`);
     }
 }

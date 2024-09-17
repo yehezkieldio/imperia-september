@@ -2,7 +2,7 @@ import { Result } from "@sapphire/framework";
 
 export const languageMap = new Map([
     ["en-US", "American English"],
-    ["id-ID", "Indonesian"],
+    ["id-ID", "Bahasa Indonesia"],
 ]);
 
 export function mapToLanguageArray(map: Map<string, string> = languageMap): { name: string; value: string }[] {
