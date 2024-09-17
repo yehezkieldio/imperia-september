@@ -26,6 +26,7 @@ declare module "@sapphire/pieces" {
 declare module "@sapphire/framework" {
     interface ArgType {
         guild: Guild;
+        languageCode: string;
         timeExpression: number;
     }
 

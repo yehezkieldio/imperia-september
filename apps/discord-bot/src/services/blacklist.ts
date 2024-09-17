@@ -1,6 +1,7 @@
 import { database, equal } from "@imperia/database";
 import { blacklistEntities } from "@imperia/database/schema";
 import { Service } from "@imperia/stores";
+
 import { UserError } from "@sapphire/framework";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
