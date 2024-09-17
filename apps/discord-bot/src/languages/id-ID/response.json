@@ -1,0 +1,11 @@
+{
+    "server_only": "Perintah ini hanya tersedia di server! Harap gunakan perintah ini di server...",
+    "server_blacklisted": "Server ini masuk daftar hitam! Saya tidak dapat menjalankan perintah di server ini...",
+    "user_blacklisted": "Anda masuk daftar hitam! Anda tidak dapat menjalankan perintah...",
+    "command_disabled": "Perintah ini dinonaktifkan secara global! Silakan coba lagi nanti...",
+    "command_cooldown": "Perintah ini sedang dalam masa jeda! Harap tunggu hingga masa jeda berakhir...",
+    "command_run": "Perintah ini tidak tersedia dalam konteks ini! Harap gunakan perintah ini dalam {{channel_type}}",
+    "missing_client_permissions": "Saya tidak memiliki izin yang diperlukan untuk menjalankan perintah ini!\nIzin yang diperlukan: {{permissions}}",
+    "missing_user_permissions": "Anda kehilangan izin yang diperlukan untuk menjalankan perintah ini!\nIzin yang diperlukan: {{permissions}}",
+    "unhandled": "Terjadi kesalahan yang tidak tertangani saat menjalankan perintah ini! Silakan hubungi pengembang..."
+}

@@ -1,4 +1,5 @@
 {
+    "server_only": "This command is only available in servers! Please use this command in a server...",
     "server_blacklisted": "This server is blacklisted! I cannot execute commands in this server...",
     "user_blacklisted": "You are blacklisted! You cannot execute commands...",
     "command_disabled": "This command is globally disabled! Please try again later...",

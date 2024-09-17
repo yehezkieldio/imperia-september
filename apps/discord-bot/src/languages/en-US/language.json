@@ -1,0 +1,5 @@
+{
+    "invalid_language": "Invalid language. Available languages: {{languages}}",
+    "already_set": "Langauge is already set to {{language}}",
+    "set": "Language set to {{language}}"
+}
