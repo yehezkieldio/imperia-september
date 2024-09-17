@@ -20,5 +20,5 @@ export function resolveLanguageCode(languageCode: string): Result<string, string
         return Result.ok([...languageMap.keys()].join(", "));
     }
 
-    return Result.ok(language);
+    return Result.ok(languageCode);
 }

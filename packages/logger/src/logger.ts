@@ -89,9 +89,9 @@ export class ImperiaLogger implements ILogger {
             if (this.withTimestamp) {
                 const time = this.timestamp.displayUTC(new Date());
 
-                console.log(`${dim(time)} ${this.#colorize(level).padEnd(16)} ${values}`);
+                console.log(`${dim(time)} ${this.#colorize(level).padEnd(18)} ${values}`);
             } else {
-                console.log(`${this.#colorize(level).padEnd(16)} ${values}`);
+                console.log(`${this.#colorize(level).padEnd(18)} ${values}`);
             }
         }
     }

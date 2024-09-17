@@ -17,7 +17,9 @@ export class ChatInputCommadDeniedListener extends Listener {
 
         logger.debug(`ChatInputCommadDeniedListener: ${error.identifier}`);
 
-        const response: string = services.response.generateDeniedResponse(error);
+        if (!interaction.guildId) return;
+
+        const response: string = await services.response.commandDenied(interaction.guildId, error);
 
         if (interaction.deferred || interaction.replied) {
             return interaction.editReply({

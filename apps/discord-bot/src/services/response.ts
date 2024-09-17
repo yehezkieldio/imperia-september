@@ -1,6 +1,5 @@
 import { Service } from "@imperia/stores";
 import type { UserError } from "@sapphire/framework";
-import { i18next } from "@sapphire/plugin-i18next";
 
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
@@ -12,7 +11,10 @@ export class ResponseService extends Service {
         });
     }
 
-    public generateDeniedResponse(error: UserError): string {
+    public async commandDenied(guildId: string, error: UserError): Promise<string> {
+        const languageCode = await this.container.utilities.guild.getLanguage(guildId);
+        const resolveKey = this.container.i18n.getT(languageCode);
+
         const { getChannelType, getMissingPermissions } = this.container.utilities.bot;
 
         /* -------------------------- GLOBAL PRECONDITIONS -------------------------- */
@@ -32,15 +34,15 @@ export class ResponseService extends Service {
         }
 
         if (error.identifier === ImperiaIdentifiers.CommandDisabled) {
-            return i18next.t("response:command_disabled");
+            return resolveKey("response:command_disabled");
         }
 
         if (error.identifier === ImperiaIdentifiers.PreconditionCooldown) {
-            return i18next.t("response:command_cooldown");
+            return resolveKey("response:command_cooldown");
         }
 
         if (error.identifier === ImperiaIdentifiers.PreconditionRunIn) {
-            return i18next.t("response:command_run", { channel_type: getChannelType(error) });
+            return resolveKey("response:command_run", { channel_type: getChannelType(error) });
         }
 
         /* ------------------------ PERMISSION PRECONDITIONS ------------------------ */
@@ -49,20 +51,20 @@ export class ResponseService extends Service {
             error.identifier === ImperiaIdentifiers.PreconditionClientPermissions ||
             error.identifier === ImperiaIdentifiers.PreconditionClientPermissionsNoPermissions
         ) {
-            return i18next.t("response:missing_client_permissions", { permissions: getMissingPermissions(error) });
+            return resolveKey("response:missing_client_permissions", { permissions: getMissingPermissions(error) });
         }
 
         if (
             error.identifier === ImperiaIdentifiers.PreconditionUserPermissions ||
             error.identifier === ImperiaIdentifiers.PreconditionUserPermissionsNoPermissions
         ) {
-            return i18next.t("response:missing_user_permissions", { permissions: getMissingPermissions(error) });
+            return resolveKey("response:missing_user_permissions", { permissions: getMissingPermissions(error) });
         }
 
         /* --------------------------------- DEFAULT -------------------------------- */
 
         this.container.logger.debug(error.message);
 
-        return i18next.t("response:unhandled");
+        return resolveKey("response:unhandled");
     }
 }

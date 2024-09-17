@@ -1,23 +1,28 @@
-import { type ChatInputCommandErrorPayload, Listener, type UserError } from "@sapphire/framework";
+import { Listener, type MessageCommandDeniedPayload, type UserError } from "@sapphire/framework";
+import { resolveKey } from "@sapphire/plugin-i18next";
 import { ImperiaEvents } from "#lib/extensions/constants/events";
 
-export class ChatInputCommadErrorListener extends Listener {
+export class MessageCommandDeniedListener extends Listener {
     public constructor(context: Listener.LoaderContext, options: Listener.Options) {
         super(context, {
             ...options,
             once: false,
-            event: ImperiaEvents.ChatInputCommandError,
+            event: ImperiaEvents.MessageCommandDenied,
         });
     }
 
-    public async run(error: UserError, payload: ChatInputCommandErrorPayload) {
-        const { logger } = this.container;
-        const { interaction } = payload;
+    public async run(error: UserError, payload: MessageCommandDeniedPayload) {
+        const { logger, services, utilities } = this.container;
+        const { message } = payload;
 
-        logger.debug(`ChatInputCommadErrorListener: ${error.identifier}`);
+        logger.debug(`MessageCommandDeniedListener: ${error.identifier}`);
 
-        return interaction.reply({
-            content: `${error.identifier}\n${error.message}`,
+        if (!message.guildId) return;
+
+        const response: string = await services.response.commandDenied(message.guildId, error);
+
+        return message.reply({
+            content: utilities.bot.isATranslationKey(response) ? await resolveKey(message, response) : response,
         });
     }
 }
