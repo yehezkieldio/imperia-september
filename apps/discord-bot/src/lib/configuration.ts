@@ -47,7 +47,8 @@ export const configuration: ImperiaClientOptions = {
     loadMessageCommandListeners: true,
     logger: {
         instance: new ImperiaLogger({
-            withTimestamp: true,
+            withTimestamp: discordBotEnv.NODE_ENV !== "development",
+            reducePadding: discordBotEnv.NODE_ENV === "development",
             minLevel: discordBotEnv.NODE_ENV === "development" ? LogLevel.Debug : LogLevel.Info,
         }),
         level: discordBotEnv.NODE_ENV === "development" ? LogLevel.Debug : LogLevel.Info,

@@ -1,5 +1,5 @@
 import { Timestamp } from "@sapphire/timestamp";
-import { blue, bold, cyan, dim, greenBright, red, redBright, whiteBright, yellow } from "colorette";
+import { blue, bold, cyan, cyanBright, greenBright, red, redBright, whiteBright, yellow } from "colorette";
 
 export enum LogLevel {
     Trace = 10,
@@ -25,21 +25,25 @@ interface ILogger {
 export interface ImperiaLoggerOptions {
     minLevel?: LogLevel;
     withTimestamp?: boolean;
+    reducePadding?: boolean;
 }
 
 export class ImperiaLogger implements ILogger {
     private minLevel: LogLevel;
     private timestamp: Timestamp;
     private withTimestamp = true;
+    private reducePadding = false;
 
     constructor(
         options: ImperiaLoggerOptions = {
             minLevel: LogLevel.Info,
             withTimestamp: true,
+            reducePadding: false,
         },
     ) {
         this.minLevel = options.minLevel ?? LogLevel.Debug;
         this.withTimestamp = options.withTimestamp ?? true;
+        this.reducePadding = options.reducePadding ?? false;
 
         this.timestamp = new Timestamp("YYYY-MM-DD HH:mm:ss");
     }
@@ -85,13 +89,15 @@ export class ImperiaLogger implements ILogger {
     /* -------------------------------------------------------------------------- */
 
     write(level: LogLevel, ...values: readonly unknown[]): void {
+        const padding = this.reducePadding ? 8 : 18;
+
         if (this.has(level)) {
             if (this.withTimestamp) {
                 const time = this.timestamp.displayUTC(new Date());
 
-                console.log(`${dim(time)} ${this.#colorize(level).padEnd(18)} ${values}`);
+                console.log(`${cyanBright(time)} ${this.#colorize(level).padEnd(18)} ${values}`);
             } else {
-                console.log(`${this.#colorize(level).padEnd(18)} ${values}`);
+                console.log(`${this.#colorize(level).padEnd(padding)} ${values}`);
             }
         }
     }
