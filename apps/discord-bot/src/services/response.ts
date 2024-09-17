@@ -12,8 +12,7 @@ export class ResponseService extends Service {
     }
 
     public async commandError(guildId: string, error: Error): Promise<string> {
-        const languageCode = await this.container.utilities.guild.getLanguage(guildId);
-        const resolveKey = this.container.i18n.getT(languageCode);
+        const resolveKey = await this.container.utilities.bot.getResolveKey(guildId);
 
         if (error instanceof UserError) {
             if (error.identifier === ImperiaIdentifiers.ArgsMissing) {
@@ -39,8 +38,7 @@ export class ResponseService extends Service {
     }
 
     public async commandDenied(guildId: string, error: UserError): Promise<string> {
-        const languageCode = await this.container.utilities.guild.getLanguage(guildId);
-        const resolveKey = this.container.i18n.getT(languageCode);
+        const resolveKey = await this.container.utilities.bot.getResolveKey(guildId);
 
         const { getChannelType, getMissingPermissions } = this.container.utilities.bot;
 

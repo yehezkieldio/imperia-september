@@ -54,6 +54,13 @@ export class BotUtility extends Utility {
         return await this.container.client.guilds.fetch(guildId);
     };
 
+    public getResolveKey = async (guildId: string) => {
+        const languageCode = await this.container.utilities.guild.getLanguage(guildId);
+        const resolveKey = this.container.i18n.getT(languageCode);
+
+        return resolveKey;
+    };
+
     public isATranslationKey = (key: string) => {
         /**
          * We check if a response string contains a colon, which is the separator for translation keys.
