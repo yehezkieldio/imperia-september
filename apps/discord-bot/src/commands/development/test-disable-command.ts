@@ -5,11 +5,11 @@ import { DEVELOPMENT_SERVERS } from "#lib/configuration";
 import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
-export class ErrorDisabledCommand extends ImperiaCommand {
+export class TestDisableCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
         super(context, {
             ...options,
-            description: "A command that fire up an command disabled error to simulate a disabled command.",
+            description: "Simulate a disabled command.",
             preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
