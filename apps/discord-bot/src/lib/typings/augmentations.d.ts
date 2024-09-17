@@ -3,6 +3,7 @@ import type { Guild } from "discord.js";
 import type { BlacklistService } from "#services/blacklist";
 import type { ResponseService } from "#services/response";
 
+import type { ImperiaCommand } from "#lib/extensions/command";
 import type { BotUtility } from "#utilities/bot";
 import type { GuildUtility } from "#utilities/guild";
 
@@ -26,6 +27,7 @@ declare module "@sapphire/pieces" {
 declare module "@sapphire/framework" {
     interface ArgType {
         guild: Guild;
+        command: ImperiaCommand;
         languageCode: string;
         timeExpression: number;
     }

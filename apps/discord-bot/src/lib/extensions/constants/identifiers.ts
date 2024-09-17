@@ -17,6 +17,7 @@ enum Identifiers {
 
     /* ------------------------------ ARGUMENT ERROR ----------------------------- */
     ArgumentTimeExpressionError = "timeExpressionError",
+    ArgumentCommandError = "commandError",
 }
 
 export const ImperiaIdentifiers = {
