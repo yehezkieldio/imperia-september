@@ -22,6 +22,10 @@ export class ResponseService extends Service {
             if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
                 return error.message;
             }
+
+            if (error.identifier === ImperiaIdentifiers.CommandDisabled) {
+                return resolveKey("response:command_disabled");
+            }
         }
 
         if (error instanceof ArgumentError) {

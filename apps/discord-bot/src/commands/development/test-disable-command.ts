@@ -9,7 +9,7 @@ export class TestDisableCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
         super(context, {
             ...options,
-            description: "Simulate a disabled command.",
+            description: "Simulate a globally disabled command.",
             preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
