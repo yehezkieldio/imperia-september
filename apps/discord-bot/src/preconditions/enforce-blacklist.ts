@@ -1,5 +1,4 @@
 import { AllFlowsPrecondition, type Result, type UserError } from "@sapphire/framework";
-import { i18next } from "@sapphire/plugin-i18next";
 import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Message } from "discord.js";
 
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
@@ -29,6 +28,8 @@ export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
     private async doBlacklistCheck(guildId: string | null, userId: string | null): Promise<Result<unknown, UserError>> {
         if (guildId === null || userId === null) return this.ok();
 
+        const resolveKey = await this.container.utilities.bot.getResolveKey(guildId);
+
         const [isServerBlacklisted, isUserBlacklisted] = await Promise.all([
             this.container.services.blacklist.isServerBlacklisted(guildId),
             this.container.services.blacklist.isUserBlacklisted(userId),
@@ -37,14 +38,14 @@ export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
         if (isServerBlacklisted) {
             return this.error({
                 identifier: ImperiaIdentifiers.ServerBlacklisted,
-                message: i18next.t("response:server_blacklisted"),
+                message: resolveKey("response:server_blacklisted"),
             });
         }
 
         if (isUserBlacklisted) {
             return this.error({
                 identifier: ImperiaIdentifiers.ServerBlacklisted,
-                message: i18next.t("response:user_blacklisted"),
+                message: resolveKey("response:user_blacklisted"),
             });
         }
 
