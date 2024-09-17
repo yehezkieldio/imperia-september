@@ -22,8 +22,11 @@ export class TestSubCommandCommand extends ImperiaSubcommand {
 
     public override registerApplicationCommands(registry: ImperiaSubcommand.Registry): void {
         /**
-         * README: Using a separate builder variable (SlashCommandBuilder) like other commands, seems to broke registration of subcommands
-         * Currently, after testing and debugging, the only way to register subcommands is to register them directly inside the main command builder
+         * Using a separate builder variable (SlashCommandBuilder) like other commands,
+         * seems to broke registration of subcommands
+         *
+         * Currently, after testing and debugging, the only way to register subcommands is to register them directly
+         * inside the main command builder
          *
          * Spent my morning and a coffee on this, but it's working now :) - 09/18/2024
          */
