@@ -91,6 +91,10 @@ export class GuildUtility extends Utility {
         await database.update(guildSettings).set({ language }).where(equal(guildSettings.guildId, guildId));
     }
 
+    public async resetLanguage(guildId: string): Promise<void> {
+        await this.setLanguage(guildId, "en-US");
+    }
+
     /* -------------------------------------------------------------------------- */
 
     public async getDisabledCommands(guildId: string): Promise<string[]> {

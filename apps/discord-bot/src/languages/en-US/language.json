@@ -1,7 +1,8 @@
 {
-    "list_languages": "Available languages: {{languages}}",
+    "list_languages": "Available languages:\n{{languages}}",
     "invalid_language": "Invalid language. Available languages: {{languages}}",
     "no_language": "No language provided. Available languages: {{languages}}",
     "already_set": "Langauge is already set to {{language}}",
-    "set": "Language set to {{language}}"
+    "set": "Language set to {{language}}",
+    "reset": "Language reset to default, which is American English (en-US)"
 }
