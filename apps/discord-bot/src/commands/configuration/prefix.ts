@@ -49,20 +49,15 @@ export class PrefixCommand extends ImperiaSubcommand {
                 .setName(this.name)
                 .setDescription(this.description)
                 .addSubcommand((command) => command.setName("list").setDescription("The current prefix of the bot"))
-                .addSubcommandGroup((group) =>
-                    group
-                        .setName("action")
-                        .setDescription("Manage prefix settings")
-                        .addSubcommand((command) =>
-                            command
-                                .setName("set")
-                                .setDescription("Set the bot's prefix")
-                                .addStringOption((option) =>
-                                    option.setName("prefix").setDescription("The prefix to set").setRequired(true),
-                                ),
-                        )
-                        .addSubcommand((command) => command.setName("reset").setDescription("Reset the bot's prefix")),
-                ),
+                .addSubcommand((command) =>
+                    command
+                        .setName("set")
+                        .setDescription("Set the bot's prefix")
+                        .addStringOption((option) =>
+                            option.setName("prefix").setDescription("The prefix to set").setRequired(true),
+                        ),
+                )
+                .addSubcommand((command) => command.setName("reset").setDescription("Reset the bot's prefix")),
         );
     }
 

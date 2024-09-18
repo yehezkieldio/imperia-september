@@ -50,26 +50,19 @@ export class LanguageCommand extends ImperiaSubcommand {
                 .setName(this.name)
                 .setDescription(this.description)
                 .addSubcommand((command) => command.setName("list").setDescription("List all available languages"))
-                .addSubcommandGroup((group) =>
-                    group
-                        .setName("action")
-                        .setDescription("Manage language settings")
-                        .addSubcommand((command) =>
-                            command
-                                .setName("set")
-                                .setDescription("Set the bot's language")
-                                .addStringOption((option) =>
-                                    option
-                                        .setName("language_code")
-                                        .setDescription("The language code to set the bot's language to")
-                                        .setRequired(true)
-                                        .addChoices(mapToLanguageArray()),
-                                ),
-                        )
-                        .addSubcommand((command) =>
-                            command.setName("reset").setDescription("Reset the bot's language"),
+                .addSubcommand((command) =>
+                    command
+                        .setName("set")
+                        .setDescription("Set the bot's language")
+                        .addStringOption((option) =>
+                            option
+                                .setName("language_code")
+                                .setDescription("The language code to set the bot's language to")
+                                .setRequired(true)
+                                .addChoices(mapToLanguageArray()),
                         ),
-                ),
+                )
+                .addSubcommand((command) => command.setName("reset").setDescription("Reset the bot's language")),
         );
     }
 
