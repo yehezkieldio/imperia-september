@@ -4,7 +4,7 @@ import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaEvents } from "#lib/extensions/constants/events";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
-export class CheckGuildCommand extends ImperiaCommand {
+export class EmitGuildCreateCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
         super(context, {
             ...options,
