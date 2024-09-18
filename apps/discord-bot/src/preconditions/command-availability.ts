@@ -26,7 +26,7 @@ export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
         if (message.guildId === null) return this.ok();
 
         const commandName = await this.container.utilities.bot.getCommandFromContent(message);
-        this.container.logger.debug(`Command name: ${commandName}`);
+        this.container.logger.debug(`EnforceBlacklistPrecondition: Command name: ${commandName}`);
 
         if (!commandName) return this.ok();
 

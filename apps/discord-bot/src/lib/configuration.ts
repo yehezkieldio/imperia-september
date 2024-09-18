@@ -25,7 +25,7 @@ export const configuration: ImperiaClientOptions = {
     defaultPrefix: discordBotEnv.DEFAULT_PREFIX,
     fetchPrefix: async (context: Message | CommandInteraction): Promise<string> => {
         const guildId: string = context.guildId ?? (context.guild?.id as string);
-        container.logger.debug(`Fetching prefix for guild ${guildId}.`);
+        container.logger.debug(`ImperiaConfiguration: Fetching prefix for guild ${guildId}.`);
 
         return container.utilities.guild.getPrefix(guildId);
     },
@@ -38,7 +38,7 @@ export const configuration: ImperiaClientOptions = {
     i18n: {
         fetchLanguage: async (context: InternationalizationContext): Promise<string | null> => {
             if (!context.guild) return discordBotEnv.DEFAULT_LANGUAGE;
-            container.logger.debug(`Fetching language for guild ${context.guild.id}.`);
+            container.logger.debug(`ImperiaConfiguration: Fetching language for guild ${context.guild.id}.`);
 
             return container.utilities.guild.getLanguage(context.guild.id);
         },

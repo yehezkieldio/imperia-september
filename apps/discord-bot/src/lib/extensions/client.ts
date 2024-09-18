@@ -31,7 +31,7 @@ export class ImperiaClient extends SapphireClient {
 
     public override fetchPrefix = async (context: Message | CommandInteraction): Promise<string> => {
         const guildId: string = context.guildId ?? (context.guild?.id as string);
-        container.logger.debug(`Fetching prefix for guild ${guildId}.`);
+        container.logger.debug(`ImperiaClient: Fetching prefix for guild ${guildId}.`);
 
         return container.utilities.guild.getPrefix(guildId);
     };
