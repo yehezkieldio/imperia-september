@@ -17,7 +17,6 @@ export class LanguageCommand extends ImperiaSubcommand {
         super(context, {
             ...options,
             description: "Manage how the bot speaks in your server.",
-            preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
             subcommands: [
