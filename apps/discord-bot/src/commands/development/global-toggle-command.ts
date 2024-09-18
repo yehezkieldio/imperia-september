@@ -6,11 +6,11 @@ import { ImperiaCommand } from "#lib/extensions/command";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 import { resolveCommand } from "#lib/resolvers/command";
 
-export class DisableGlobalCommand extends ImperiaCommand {
+export class GlobalToggleCommand extends ImperiaCommand {
     public constructor(context: ImperiaCommand.LoaderContext, options: ImperiaCommand.Options) {
         super(context, {
             ...options,
-            description: "Disable a command globally, will reset after a bot restart.",
+            description: "Globally toggle a command enabled or disabled, will reset after a bot restart.",
             preconditions: [ImperiaIdentifiers.DeveloperUserOnly],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
         });
@@ -21,7 +21,7 @@ export class DisableGlobalCommand extends ImperiaCommand {
             .setName(this.name)
             .setDescription(this.description)
             .addStringOption((option) =>
-                option.setName("command").setDescription("The command to disable.").setRequired(true),
+                option.setName("command").setDescription("The command to toggle.").setRequired(true),
             );
 
         void registry.registerChatInputCommand(command, {
@@ -44,7 +44,9 @@ export class DisableGlobalCommand extends ImperiaCommand {
         const command = getCommand.unwrap();
 
         if (command.enabled === false) {
-            return interaction.reply(`The command \`${command.name}\` is already disabled.`);
+            command.enabled = true;
+
+            return interaction.reply(`Enabled the command \`${command.name}\`.`);
         }
 
         command.enabled = false;
@@ -63,7 +65,9 @@ export class DisableGlobalCommand extends ImperiaCommand {
         const command = commandArgument.unwrap();
 
         if (command.enabled === false) {
-            return message.reply(`The command \`${command.name}\` is already disabled.`);
+            command.enabled = true;
+
+            return message.reply(`Enabled the command \`${command.name}\`.`);
         }
 
         command.enabled = false;
