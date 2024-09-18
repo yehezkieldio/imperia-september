@@ -1,4 +1,4 @@
-import {} from "@imperia/database";
+import { connection, database } from "@imperia/database";
 import { discordBotEnv } from "@imperia/environment/discord-bot";
 
 import {
@@ -37,10 +37,30 @@ export class ImperiaClient extends SapphireClient {
 
     public override async login(token: string): Promise<string> {
         container.logger.info("ImperiaClient: Logging in...");
+
+        // Verify if there is a connection and the tables are created in the database
+        container.logger.info("ImperiaClient: Connected to the PostgreSQL database.");
+        try {
+            container.logger.info("ImperiaClient: Testing the PostgresQL database connection...");
+            await database.query.users.findFirst();
+            container.logger.info("ImperiaClient: PostgresQL database connection test successful.");
+        } catch (error) {
+            container.logger.error("ImperiaClient: An error occurred with the Postgres database, see below:");
+            container.logger.error(error);
+
+            process.exit(1);
+        }
+        container.logger.info("ImperiaClient: PostgresQL database is ready for use.");
+
         return super.login(token);
     }
 
     public override async destroy(): Promise<void> {
+        await connection.end({
+            timeout: 3,
+        });
+        container.logger.info("ImperiaClient: Disconnected from the PostgresQL database.");
+
         return super.destroy();
     }
 }
