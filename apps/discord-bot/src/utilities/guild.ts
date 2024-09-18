@@ -76,6 +76,10 @@ export class GuildUtility extends Utility {
         await database.update(guildSettings).set({ prefix }).where(equal(guildSettings.guildId, guildId));
     }
 
+    public async resetPrefix(guildId: string): Promise<void> {
+        await this.setPrefix(guildId, discordBotEnv.DEFAULT_PREFIX);
+    }
+
     /* -------------------------------------------------------------------------- */
 
     public async getLanguage(guildId: string): Promise<string> {

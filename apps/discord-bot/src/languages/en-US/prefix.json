@@ -1,0 +1,8 @@
+{
+    "list_prefix": "The prefix for this server is {{prefix}}",
+    "already_set": "Prefix is already set to {{prefix}}",
+    "invalid_prefix": "Invalid prefix. Prefix must be more than single character",
+    "no_prefix": "No prefix provided.",
+    "set": "Prefix set to {{prefix}}",
+    "reset": "Prefix reset to default, which is imperia!"
+}

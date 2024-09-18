@@ -10,16 +10,15 @@ import { type Message, PermissionFlagsBits } from "discord.js";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 import { ImperiaEmbedBuilder } from "#lib/extensions/embed-builder";
 import { ImperiaSubcommand } from "#lib/extensions/subcommand";
-import { languageCodes, mapToLanguageArray } from "#lib/resolvers/language-code";
 
-export class LanguageCommand extends ImperiaSubcommand {
+export class PrefixCommand extends ImperiaSubcommand {
     public constructor(context: ImperiaSubcommand.LoaderContext, options: ImperiaSubcommand.Options) {
         super(context, {
             ...options,
             description: "Manage how the bot speaks in your server.",
             requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
-            name: "language",
+            name: "prefix",
             subcommands: [
                 {
                     type: "method",
@@ -49,26 +48,20 @@ export class LanguageCommand extends ImperiaSubcommand {
             builder
                 .setName(this.name)
                 .setDescription(this.description)
-                .addSubcommand((command) => command.setName("list").setDescription("List all available languages"))
+                .addSubcommand((command) => command.setName("list").setDescription("The current prefix of the bot"))
                 .addSubcommandGroup((group) =>
                     group
                         .setName("action")
-                        .setDescription("Manage language settings")
+                        .setDescription("Manage prefix settings")
                         .addSubcommand((command) =>
                             command
                                 .setName("set")
-                                .setDescription("Set the bot's language")
+                                .setDescription("Set the bot's prefix")
                                 .addStringOption((option) =>
-                                    option
-                                        .setName("language_code")
-                                        .setDescription("The language code to set the bot's language to")
-                                        .setRequired(true)
-                                        .addChoices(mapToLanguageArray()),
+                                    option.setName("prefix").setDescription("The prefix to set").setRequired(true),
                                 ),
                         )
-                        .addSubcommand((command) =>
-                            command.setName("reset").setDescription("Reset the bot's language"),
-                        ),
+                        .addSubcommand((command) => command.setName("reset").setDescription("Reset the bot's prefix")),
                 ),
         );
     }
@@ -83,10 +76,10 @@ export class LanguageCommand extends ImperiaSubcommand {
             });
         }
 
-        const languageList: string = this.#getLanguageList();
+        const prefix: string = await this.container.utilities.guild.getPrefix(interaction.guild.id);
         const embed: ImperiaEmbedBuilder = new ImperiaEmbedBuilder().setTheme("info");
 
-        embed.setDescription(await resolveKey(interaction, "language:list_languages", { languages: languageList }));
+        embed.setDescription(await resolveKey(interaction, "prefix:list_prefix", { prefix: prefix }));
 
         return interaction.reply({ embeds: [embed] });
     }
@@ -99,18 +92,12 @@ export class LanguageCommand extends ImperiaSubcommand {
             });
         }
 
-        const languageList: string = this.#getLanguageList();
+        const prefix: string = await this.container.utilities.guild.getPrefix(message.guild.id);
         const embed: ImperiaEmbedBuilder = new ImperiaEmbedBuilder().setTheme("info");
 
-        embed.setDescription(await resolveKey(message, "language:list_languages", { languages: languageList }));
+        embed.setDescription(await resolveKey(message, "prefix:list_prefix", { prefix: prefix }));
 
         return message.reply({ embeds: [embed] });
-    }
-
-    #getLanguageList() {
-        return mapToLanguageArray()
-            .map((lang) => `${lang.name} - ${lang.value}`)
-            .join("\n");
     }
 
     /* -------------------------------------------------------------------------- */
@@ -123,22 +110,22 @@ export class LanguageCommand extends ImperiaSubcommand {
             });
         }
 
-        const languageCode: string = interaction.options.getString("language_code", true);
-        const currentLanguage: string = await this.container.utilities.guild.getLanguage(interaction.guild.id);
+        const prefix: string = interaction.options.getString("prefix", true);
+        const currentPrefix: string = await this.container.utilities.guild.getPrefix(interaction.guild.id);
 
-        if (currentLanguage === languageCode) {
+        if (currentPrefix === prefix) {
             return interaction.reply({
-                content: await resolveKey(interaction, "language:already_set", {
-                    language: languageCode,
+                content: await resolveKey(interaction, "prefix:already_set", {
+                    prefix: prefix,
                 }),
             });
         }
 
-        await this.container.utilities.guild.setLanguage(interaction.guild.id, languageCode);
+        await this.container.utilities.guild.setPrefix(interaction.guild.id, prefix);
 
         return interaction.reply({
-            content: await resolveKey(interaction, "language:set", {
-                language: languageCode,
+            content: await resolveKey(interaction, "prefix:set", {
+                prefix: prefix,
             }),
         });
     }
@@ -151,46 +138,42 @@ export class LanguageCommand extends ImperiaSubcommand {
             });
         }
 
-        const languageCodeArgument: ResultType<string> = await args.pickResult("languageCode");
+        const prefixArgument: ResultType<string> = await args.pickResult("string");
 
-        if (languageCodeArgument.isErr()) {
-            const error: UserError | ArgumentError<string> = languageCodeArgument.unwrapErr();
+        if (prefixArgument.isErr()) {
+            const error: UserError | ArgumentError<string> = prefixArgument.unwrapErr();
 
             // If the argument provided is invalid, we'll throw an error.
             if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
                 throw new UserError({
                     identifier: ImperiaIdentifiers.ArgsMissing,
-                    message: await resolveKey(message, "language:invalid_language", {
-                        languages: error.message,
-                    }),
+                    message: await resolveKey(message, "prefix:invalid_prefix"),
                 });
             }
 
             // If the argument provided is missing, we'll throw an error.
             throw new UserError({
                 identifier: ImperiaIdentifiers.ArgsMissing,
-                message: await resolveKey(message, "language:no_language", {
-                    languages: languageCodes,
-                }),
+                message: await resolveKey(message, "prefix:no_prefix"),
             });
         }
 
-        const currentLanguage: string = await this.container.utilities.guild.getLanguage(message.guild.id);
-        const languageCode = languageCodeArgument.unwrap();
+        const currentPrefix: string = await this.container.utilities.guild.getPrefix(message.guild.id);
+        const prefix = prefixArgument.unwrap();
 
-        if (currentLanguage === languageCode) {
+        if (currentPrefix === prefix) {
             return message.reply({
-                content: await resolveKey(message, "language:already_set", {
-                    language: languageCode,
+                content: await resolveKey(message, "prefix:already_set", {
+                    prefix: prefix,
                 }),
             });
         }
 
-        await this.container.utilities.guild.setLanguage(message.guild.id, languageCode);
+        await this.container.utilities.guild.setPrefix(message.guild.id, prefix);
 
         return message.reply({
-            content: await resolveKey(message, "language:set", {
-                language: languageCode,
+            content: await resolveKey(message, "prefix:set", {
+                prefix: prefix,
             }),
         });
     }
@@ -205,10 +188,10 @@ export class LanguageCommand extends ImperiaSubcommand {
             });
         }
 
-        await this.container.utilities.guild.resetLanguage(interaction.guild.id);
+        await this.container.utilities.guild.resetPrefix(interaction.guild.id);
 
         return interaction.reply({
-            content: await resolveKey(interaction, "language:reset"),
+            content: await resolveKey(interaction, "prefix:reset"),
         });
     }
 
@@ -220,10 +203,10 @@ export class LanguageCommand extends ImperiaSubcommand {
             });
         }
 
-        await this.container.utilities.guild.resetLanguage(message.guild.id);
+        await this.container.utilities.guild.resetPrefix(message.guild.id);
 
         return message.reply({
-            content: await resolveKey(message, "language:reset"),
+            content: await resolveKey(message, "prefix:reset"),
         });
     }
 }
