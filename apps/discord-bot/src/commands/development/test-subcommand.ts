@@ -1,4 +1,5 @@
 import { CommandOptionsRunTypeEnum } from "@sapphire/framework";
+import { DEVELOPMENT_SERVERS } from "#lib/configuration";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 import { ImperiaSubcommand } from "#lib/extensions/subcommand";
 
@@ -30,11 +31,15 @@ export class TestSubCommandCommand extends ImperiaSubcommand {
          *
          * Spent my morning and a coffee on this, but it's working now :) - 09/18/2024
          */
-        registry.registerChatInputCommand((builder) =>
-            builder
-                .setName("test-subcommand")
-                .setDescription("Test subcommand")
-                .addSubcommand((command) => command.setName("first").setDescription("First subcommand")),
+        registry.registerChatInputCommand(
+            (builder) =>
+                builder
+                    .setName("test-subcommand")
+                    .setDescription("Test subcommand")
+                    .addSubcommand((command) => command.setName("first").setDescription("First subcommand")),
+            {
+                guildIds: DEVELOPMENT_SERVERS,
+            },
         );
     }
 
