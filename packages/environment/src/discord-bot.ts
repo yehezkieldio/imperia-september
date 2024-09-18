@@ -9,6 +9,8 @@ export const discordBotEnv = {
     ...createEnv({
         server: {
             DISCORD_TOKEN: z.string(),
+            DEFAULT_PREFIX: z.string().default("imperia!"),
+            DEFAULT_LANGUAGE: z.string().default("en-US"),
         },
         runtimeEnv: process.env,
     }),

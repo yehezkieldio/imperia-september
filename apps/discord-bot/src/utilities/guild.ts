@@ -1,5 +1,6 @@
 import { database, equal } from "@imperia/database";
 import { guildSettings, guilds } from "@imperia/database/schema";
+import { discordBotEnv } from "@imperia/environment/discord-bot";
 import { Utility } from "@imperia/stores";
 import { UserError } from "@sapphire/framework";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
@@ -64,7 +65,7 @@ export class GuildUtility extends Utility {
             return (
                 typeof this.container.client.options.defaultPrefix === "string"
                     ? this.container.client.options.defaultPrefix
-                    : "imperia!"
+                    : discordBotEnv.DEFAULT_PREFIX
             ) as string;
         }
 
@@ -81,7 +82,7 @@ export class GuildUtility extends Utility {
         const settings: GuildSettings = await this.getSettings(guildId);
 
         if (!settings.language) {
-            return "en-US";
+            return discordBotEnv.DEFAULT_LANGUAGE;
         }
 
         return settings.language;
@@ -92,7 +93,7 @@ export class GuildUtility extends Utility {
     }
 
     public async resetLanguage(guildId: string): Promise<void> {
-        await this.setLanguage(guildId, "en-US");
+        await this.setLanguage(guildId, discordBotEnv.DEFAULT_LANGUAGE);
     }
 
     /* -------------------------------------------------------------------------- */
