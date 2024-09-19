@@ -393,7 +393,12 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Prefix list");
+        const prefix: string = await this.container.utilities.guild.getPrefix(interaction.guild.id);
+        const embed: ImperiaEmbedBuilder = new ImperiaEmbedBuilder().setTheme("info");
+
+        embed.setDescription(await resolveKey(interaction, "guildconfig:list_prefix", { prefix: prefix }));
+
+        return interaction.reply({ embeds: [embed] });
     }
 
     public async messagePrefixList(message: Message) {
@@ -404,7 +409,12 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Prefix list");
+        const prefix: string = await this.container.utilities.guild.getPrefix(message.guild.id);
+        const embed: ImperiaEmbedBuilder = new ImperiaEmbedBuilder().setTheme("info");
+
+        embed.setDescription(await resolveKey(message, "guildconfig:list_prefix", { prefix: prefix }));
+
+        return message.reply({ embeds: [embed] });
     }
 
     /* -------------------------------------------------------------------------- */
@@ -417,10 +427,27 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Prefix set");
+        const prefix = interaction.options.getString("prefix", true);
+        const currentPrefix = await this.container.utilities.guild.getPrefix(interaction.guild.id);
+
+        if (currentPrefix === prefix) {
+            return interaction.reply({
+                content: await resolveKey(interaction, "guildconfig:already_set_prefix", {
+                    prefix: prefix,
+                }),
+            });
+        }
+
+        await this.container.utilities.guild.setPrefix(interaction.guild.id, prefix);
+
+        return interaction.reply({
+            content: await resolveKey(interaction, "guildconfig:set_prefix", {
+                prefix: prefix,
+            }),
+        });
     }
 
-    public async messagePrefixSet(message: Message) {
+    public async messagePrefixSet(message: Message, args: Args) {
         if (!message.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
@@ -428,7 +455,44 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Prefix set");
+        const prefixArgument: ResultType<string> = await args.pickResult("string");
+
+        if (prefixArgument.isErr()) {
+            const error: UserError | ArgumentError<string> = prefixArgument.unwrapErr();
+
+            // If the argument provided is invalid, we'll throw an error.
+            if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
+                throw new UserError({
+                    identifier: ImperiaIdentifiers.ArgsMissing,
+                    message: await resolveKey(message, "guildconfig:invalid_prefix"),
+                });
+            }
+
+            // If the argument provided is missing, we'll throw an error.
+            throw new UserError({
+                identifier: ImperiaIdentifiers.ArgsMissing,
+                message: await resolveKey(message, "guildconfig:no_prefix"),
+            });
+        }
+
+        const prefix = prefixArgument.unwrap();
+        const currentPrefix = await this.container.utilities.guild.getPrefix(message.guild.id);
+
+        if (currentPrefix === prefix) {
+            return message.reply({
+                content: await resolveKey(message, "guildconfig:already_set_prefix", {
+                    prefix: prefix,
+                }),
+            });
+        }
+
+        await this.container.utilities.guild.setPrefix(message.guild.id, prefix);
+
+        return message.reply({
+            content: await resolveKey(message, "guildconfig:set_prefix", {
+                prefix: prefix,
+            }),
+        });
     }
 
     /* -------------------------------------------------------------------------- */
@@ -441,7 +505,11 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Prefix reset");
+        await this.container.utilities.guild.resetPrefix(interaction.guild.id);
+
+        return interaction.reply({
+            content: await resolveKey(interaction, "guildconfig:reset_prefix"),
+        });
     }
 
     public async messagePrefixReset(message: Message) {
@@ -452,7 +520,11 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Prefix reset");
+        await this.container.utilities.guild.resetPrefix(message.guild.id);
+
+        return message.reply({
+            content: await resolveKey(message, "guildconfig:reset_prefix"),
+        });
     }
 
     /* -------------------------------------------------------------------------- */

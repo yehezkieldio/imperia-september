@@ -15,12 +15,12 @@
     "no_language": "No language provided. Available languages: {{languages}}",
     "already_set_language": "Langauge is already set to {{language}}",
     "set_language": "Language set to {{language}}",
-    "reset_language": "Language reset to default, which is American English (en-US)",
+    "reset_language": "Language reset to default, which is `American English (en-US)`",
 
     "list_prefix": "The prefix for this server is {{prefix}}",
     "already_set_prefix": "Prefix is already set to {{prefix}}",
     "invalid_prefix": "Invalid prefix. Prefix must be more than single character",
     "no_prefix": "No prefix provided.",
     "set_prefix": "Prefix set to {{prefix}}",
-    "reset_prefix": "Prefix reset to default, which is imperia!"
+    "reset_prefix": "Prefix reset to default, which is `imperia!`"
 }
