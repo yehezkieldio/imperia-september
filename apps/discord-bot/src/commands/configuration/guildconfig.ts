@@ -2,6 +2,7 @@ import { CommandOptionsRunTypeEnum, UserError } from "@sapphire/framework";
 import { resolveKey } from "@sapphire/plugin-i18next";
 import { type Message, PermissionFlagsBits } from "discord.js";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
+import { ImperiaEmbedBuilder } from "#lib/extensions/embed-builder";
 import { ImperiaSubcommand } from "#lib/extensions/subcommand";
 import { mapToLanguageArray } from "#lib/resolvers/language-code";
 
@@ -160,7 +161,16 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Command list");
+        const disabledCommands: string[] = await this.#getDisabledCommands(interaction.guild.id);
+
+        const embed = new ImperiaEmbedBuilder().setTheme("info");
+        embed.setDescription(
+            await resolveKey(interaction, "guildconfig:list_disabled_commands", {
+                commands: disabledCommands.join(", "),
+            }),
+        );
+
+        return interaction.reply({ embeds: [embed] });
     }
 
     public async messageCommandList(message: Message) {
@@ -171,7 +181,20 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Command list");
+        const disabledCommands: string[] = await this.#getDisabledCommands(message.guild.id);
+
+        const embed = new ImperiaEmbedBuilder().setTheme("info");
+        embed.setDescription(
+            await resolveKey(message, "guildconfig:list_disabled_commands", {
+                commands: disabledCommands.join(", "),
+            }),
+        );
+
+        return message.reply({ embeds: [embed] });
+    }
+
+    #getDisabledCommands(guildId: string): Promise<string[]> {
+        return this.container.utilities.guild.getDisabledCommands(guildId);
     }
 
     /* -------------------------------------------------------------------------- */

@@ -48,7 +48,7 @@ export class GuildUtility extends Utility {
 
         if (!settings) {
             throw new UserError({
-                identifier: ImperiaIdentifiers.CommandServiceError,
+                identifier: ImperiaIdentifiers.UtilitiesError,
                 message: "Failed to get guild settings.",
             });
         }
@@ -110,5 +110,43 @@ export class GuildUtility extends Utility {
         }
 
         return settings.disabledCommands;
+    }
+
+    public async isCommandDisabled(guildId: string, commandName: string): Promise<boolean> {
+        const settings: GuildSettings = await this.getSettings(guildId);
+
+        return settings.disabledCommands.includes(commandName);
+    }
+
+    public async setDisabledCommand(guildId: string, commandName: string): Promise<void> {
+        const settings: GuildSettings = await this.getSettings(guildId);
+
+        if (settings.disabledCommands.includes(commandName)) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.UtilitiesError,
+                message: "Command is already disabled.",
+            });
+        }
+
+        await database
+            .update(guildSettings)
+            .set({ disabledCommands: [...settings.disabledCommands, commandName] })
+            .where(equal(guildSettings.guildId, guildId));
+    }
+
+    public async removeDisabledCommand(guildId: string, commandName: string): Promise<void> {
+        const settings: GuildSettings = await this.getSettings(guildId);
+
+        if (!settings.disabledCommands.includes(commandName)) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.UtilitiesError,
+                message: "Command is not disabled.",
+            });
+        }
+
+        await database
+            .update(guildSettings)
+            .set({ disabledCommands: settings.disabledCommands.filter((name) => name !== commandName) })
+            .where(equal(guildSettings.guildId, guildId));
     }
 }

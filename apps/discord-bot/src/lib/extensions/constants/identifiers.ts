@@ -13,8 +13,9 @@ enum Identifiers {
     InvalidArgumentProvided = "invalidArgumentProvided",
     CommandServiceError = "commandServiceError",
 
-    /* ------------------------------ SERVICE ERROR ----------------------------- */
+    /* ------------------------------ PIECES ERROR ------------------------------ */
     ServiceError = "serviceError",
+    UtilitiesError = "utilitiesError",
 
     /* ------------------------------ ARGUMENT ERROR ----------------------------- */
     ArgumentTimeExpressionError = "timeExpressionError",
