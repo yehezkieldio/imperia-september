@@ -24,6 +24,6 @@
     "set_prefix": "Prefix diatur ke {{prefix}}",
     "reset_prefix": "Prefix direset ke default, yaitu `imperia!`",
 
-    "default": "Lihat pengaturan apa yang dapat dikonfigurasi melalui perintah slash, dan apa nilai saat ini.\nPerintah pesan memiliki format yang sama dengan perintah slash secara 1:1. Sebagai contoh, `{{prefix}}guildconfig prefix list` identik dengan `/guildconfig prefix list`",
+    "default": "Lihat pengaturan apa yang dapat dikonfigurasi melalui perintah slash, dan apa nilai saat ini. Perintah pesan memiliki format yang sama dengan perintah slash secara 1:1. Sebagai contoh, `{{prefix}}guildconfig prefix list` identik dengan `/guildconfig prefix list`",
     "reset": "Mengatur ulang semua pengaturan konfigurasi guild ke nilai default."
 }
