@@ -12,7 +12,7 @@ import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 import { ImperiaEmbedBuilder } from "#lib/extensions/embed-builder";
 import { ImperiaSubcommand } from "#lib/extensions/subcommand";
 import { resolveCommand } from "#lib/resolvers/command";
-import { mapToLanguageArray } from "#lib/resolvers/language-code";
+import { languageCodes, mapToLanguageArray } from "#lib/resolvers/language-code";
 
 export class GuildConfigurationCommand extends ImperiaSubcommand {
     public constructor(context: ImperiaSubcommand.LoaderContext, options: ImperiaSubcommand.Options) {
@@ -537,7 +537,12 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Language list");
+        const languageList: string = this.#getLanguageList();
+        const embed: ImperiaEmbedBuilder = new ImperiaEmbedBuilder().setTheme("info");
+
+        embed.setDescription(await resolveKey(interaction, "guildconfig:list_languages", { languages: languageList }));
+
+        return interaction.reply({ embeds: [embed] });
     }
 
     public async messageLanguageList(message: Message) {
@@ -548,7 +553,18 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Language list");
+        const languageList: string = this.#getLanguageList();
+        const embed: ImperiaEmbedBuilder = new ImperiaEmbedBuilder().setTheme("info");
+
+        embed.setDescription(await resolveKey(message, "guildconfig:list_languages", { languages: languageList }));
+
+        return message.reply({ embeds: [embed] });
+    }
+
+    #getLanguageList() {
+        return mapToLanguageArray()
+            .map((lang) => `${lang.name} - ${lang.value}`)
+            .join("\n");
     }
 
     /* -------------------------------------------------------------------------- */
@@ -561,10 +577,27 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Language set");
+        const languageCode: string = interaction.options.getString("language_code", true);
+        const currentLanguage: string = await this.container.utilities.guild.getLanguage(interaction.guild.id);
+
+        if (currentLanguage === languageCode) {
+            return interaction.reply({
+                content: await resolveKey(interaction, "guildconfig:already_set_language", {
+                    language: languageCode,
+                }),
+            });
+        }
+
+        await this.container.utilities.guild.setLanguage(interaction.guild.id, languageCode);
+
+        return interaction.reply({
+            content: await resolveKey(interaction, "guildconfig:set_language", {
+                language: languageCode,
+            }),
+        });
     }
 
-    public async messageLanguageSet(message: Message) {
+    public async messageLanguageSet(message: Message, args: Args) {
         if (!message.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
@@ -572,7 +605,48 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Language set");
+        const languageCodeArgument: ResultType<string> = await args.pickResult("languageCode");
+
+        if (languageCodeArgument.isErr()) {
+            const error: UserError | ArgumentError<string> = languageCodeArgument.unwrapErr();
+
+            // If the argument provided is invalid, we'll throw an error.
+            if (error.identifier === ImperiaIdentifiers.CommandServiceError) {
+                throw new UserError({
+                    identifier: ImperiaIdentifiers.ArgsMissing,
+                    message: await resolveKey(message, "guildconfig:invalid_language", {
+                        languages: error.message,
+                    }),
+                });
+            }
+
+            // If the argument provided is missing, we'll throw an error.
+            throw new UserError({
+                identifier: ImperiaIdentifiers.ArgsMissing,
+                message: await resolveKey(message, "guildconfig:no_language", {
+                    languages: languageCodes,
+                }),
+            });
+        }
+
+        const currentLanguage: string = await this.container.utilities.guild.getLanguage(message.guild.id);
+        const languageCode: string = languageCodeArgument.unwrap();
+
+        if (currentLanguage === languageCode) {
+            return message.reply({
+                content: await resolveKey(message, "guildconfig:already_set_language", {
+                    language: languageCode,
+                }),
+            });
+        }
+
+        await this.container.utilities.guild.setLanguage(message.guild.id, languageCode);
+
+        return message.reply({
+            content: await resolveKey(message, "guildconfig:set_language", {
+                language: languageCode,
+            }),
+        });
     }
 
     /* -------------------------------------------------------------------------- */
@@ -585,7 +659,11 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return interaction.reply("Language reset");
+        await this.container.utilities.guild.resetLanguage(interaction.guild.id);
+
+        return interaction.reply({
+            content: await resolveKey(interaction, "guildconfig:reset_language"),
+        });
     }
 
     public async messageLanguageReset(message: Message) {
@@ -596,12 +674,12 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Language reset");
+        await this.container.utilities.guild.resetLanguage(message.guild.id);
+
+        return message.reply({
+            content: await resolveKey(message, "guildconfig:reset_language"),
+        });
     }
 
     /* -------------------------------------------------------------------------- */
-
-    public async chatInputReset(interaction: ImperiaSubcommand.ChatInputCommandInteraction) {
-        return interaction.reply("Reset");
-    }
 }
