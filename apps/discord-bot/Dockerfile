@@ -52,7 +52,7 @@ COPY --from=builder /tmp/node_modules ./node_modules
 COPY --from=builder /app/out/full/ .
 
 # Run the build using Turbo
-RUN yarn turbo run build --filter @imperia/discord-bot
+# RUN yarn turbo run build --filter @imperia/discord-bot
 
 # ---------------------------------------------------------------------------- #
 
@@ -61,6 +61,6 @@ WORKDIR /app
 
 USER bun
 
-COPY --from=installer --chown=bun:bun /app/apps/discord-bot/dist ./dist
+COPY --from=installer --chown=bun:bun /app/apps/discord-bot/src ./src
 
-CMD ["bun", "dist/main.js"]
+CMD ["bun", "src/main.ts"]
