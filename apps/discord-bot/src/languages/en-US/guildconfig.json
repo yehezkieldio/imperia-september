@@ -4,8 +4,8 @@
     "no_command": "No command provided.",
     "already_disabled": "Command is already disabled.",
     "already_enabled": "Command is already enabled.",
-    "disabled": "Command disabled.",
-    "enabled": "Command enabled.",
+    "disabled": "Command {{command}} disabled.",
+    "enabled": "Command {{command}} enabled.",
 
     "list_languages": "Available languages:\n{{languages}}",
     "invalid_language": "Invalid language. Available languages: {{languages}}",
