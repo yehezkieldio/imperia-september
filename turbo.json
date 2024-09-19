@@ -9,7 +9,6 @@
         },
         "start": {
             "persistent": true,
-            "dependsOn": ["build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
             "cache": false
         },

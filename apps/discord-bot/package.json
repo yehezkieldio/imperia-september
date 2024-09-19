@@ -2,10 +2,9 @@
     "name": "@imperia/discord-bot",
     "version": "0.0.0",
     "private": true,
-    "main": "dist/main.js",
+    "main": "src/main.ts",
     "type": "module",
     "scripts": {
-        "build": "bun --bun --env-file ../../.env tsup --format esm",
         "start": "bun --env-file ../../.env .",
         "typecheck": "tsc --noEmit"
     },
@@ -31,11 +30,14 @@
         "@imperia/typescript": "workspace:*",
         "@types/bun": "latest",
         "@types/node": "latest",
-        "tsup": "^8.2.4",
         "typescript": "^5"
     },
     "imports": {
+        "#arguments/*": "./src/arguments/*.ts",
+        "#commands/*": "./src//*.ts",
         "#lib/*": "./src/lib/*.ts",
+        "#listeners/*": "./src/listeners/*.ts",
+        "#preconditions/*": "./src/preconditions/*.ts",
         "#services/*": "./src/services/*.ts",
         "#utilities/*": "./src/utilities/*.ts"
     }
