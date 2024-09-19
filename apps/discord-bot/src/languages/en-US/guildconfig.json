@@ -22,5 +22,8 @@
     "invalid_prefix": "Invalid prefix. Prefix must be more than single character",
     "no_prefix": "No prefix provided.",
     "set_prefix": "Prefix set to {{prefix}}",
-    "reset_prefix": "Prefix reset to default, which is `imperia!`"
+    "reset_prefix": "Prefix reset to default, which is `imperia!`",
+
+    "default": "View what settings can be configured via the slash command, and what the current values are.\nMessage commands follow the same format as slash commands in a 1:1 manner. For example, `{{prefix}}guildconfig prefix list` is identical to `/guildconfig prefix list`",
+    "reset": "Resetting all guild configuration settings to default values."
 }

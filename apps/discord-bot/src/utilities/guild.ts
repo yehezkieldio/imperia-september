@@ -151,4 +151,8 @@ export class GuildUtility extends Utility {
             .set({ disabledCommands: settings.disabledCommands.filter((name) => name !== commandName) })
             .where(equal(guildSettings.guildId, guildId));
     }
+
+    public async resetDisabledCommands(guildId: string): Promise<void> {
+        await database.update(guildSettings).set({ disabledCommands: [] }).where(equal(guildSettings.guildId, guildId));
+    }
 }

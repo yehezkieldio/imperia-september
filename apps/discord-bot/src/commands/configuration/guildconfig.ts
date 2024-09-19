@@ -156,7 +156,23 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
     /* -------------------------------------------------------------------------- */
 
     public async messageDefault(message: Message) {
-        return message.reply("Default");
+        if (!message.guild) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: await resolveKey(message, "response:server_only"),
+            });
+        }
+
+        const prefix: string = await this.container.utilities.guild.getPrefix(message.guild.id);
+
+        const embed = new ImperiaEmbedBuilder().setTheme("info");
+        embed.setDescription(
+            await resolveKey(message, "guildconfig:default", {
+                prefix: prefix,
+            }),
+        );
+
+        return message.reply({ embeds: [embed] });
     }
 
     /* -------------------------------------------------------------------------- */
@@ -682,4 +698,38 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
     }
 
     /* -------------------------------------------------------------------------- */
+
+    public async chatInputReset(interaction: ImperiaSubcommand.ChatInputCommandInteraction) {
+        if (!interaction.guild) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: await resolveKey(interaction, "response:server_only"),
+            });
+        }
+
+        await this.container.utilities.guild.resetLanguage(interaction.guild.id);
+        await this.container.utilities.guild.resetPrefix(interaction.guild.id);
+        await this.container.utilities.guild.resetDisabledCommands(interaction.guild.id);
+
+        return interaction.reply({
+            content: await resolveKey(interaction, "guildconfig:reset"),
+        });
+    }
+
+    public async messageReset(message: Message) {
+        if (!message.guild) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: await resolveKey(message, "response:server_only"),
+            });
+        }
+
+        await this.container.utilities.guild.resetLanguage(message.guild.id);
+        await this.container.utilities.guild.resetPrefix(message.guild.id);
+        await this.container.utilities.guild.resetDisabledCommands(message.guild.id);
+
+        return message.reply({
+            content: await resolveKey(message, "guildconfig:reset"),
+        });
+    }
 }
