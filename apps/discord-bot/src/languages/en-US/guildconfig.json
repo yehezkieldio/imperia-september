@@ -1,0 +1,23 @@
+{
+    "list_disabled_commands": "Disabled commands for this server:\n{{commands}}",
+    "invalid_command": "Invalid command provided.",
+    "no_command": "No command provided.",
+    "already_disabled": "Command is already disabled.",
+    "already_enabled": "Command is already enabled.",
+    "disabled": "Command disabled.",
+    "enabled": "Command enabled.",
+
+    "list_languages": "Available languages:\n{{languages}}",
+    "invalid_language": "Invalid language. Available languages: {{languages}}",
+    "no_language": "No language provided. Available languages: {{languages}}",
+    "already_set_language": "Langauge is already set to {{language}}",
+    "set_language": "Language set to {{language}}",
+    "reset_language": "Language reset to default, which is American English (en-US)",
+
+    "list_prefix": "The prefix for this server is {{prefix}}",
+    "already_set_prefix": "Prefix is already set to {{prefix}}",
+    "invalid_prefix": "Invalid prefix. Prefix must be more than single character",
+    "no_prefix": "No prefix provided.",
+    "set_prefix": "Prefix set to {{prefix}}",
+    "reset_prefix": "Prefix reset to default, which is imperia!"
+}

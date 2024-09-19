@@ -1,0 +1,23 @@
+{
+    "list_disabled_commands": "Perintah yang dinonaktifkan untuk server ini:\n{{commands}}",
+    "invalid_command": "Perintah yang diberikan tidak valid.",
+    "no_command": "Tidak ada perintah yang diberikan.",
+    "already_disabled": "Perintah sudah dinonaktifkan.",
+    "already_enabled": "Perintah sudah diaktifkan.",
+    "disabled": "Perintah dinonaktifkan.",
+    "enabled": "Perintah diaktifkan.",
+
+    "list_languages": "Bahasa yang tersedia:\n{{languages}}",
+    "invalid_language": "Bahasa tidak valid. Bahasa yang tersedia: {{languages}}",
+    "no_language": "Tidak ada bahasa yang diberikan. Bahasa yang tersedia: {{languages}}",
+    "already_set_language": "Bahasa sudah diatur ke {{language}}",
+    "set_language": "Bahasa diatur ke {{language}}",
+    "reset_language": "Bahasa direset ke default, yaitu Bahasa Inggris Amerika (en-US)",
+
+    "list_prefix": "Prefix untuk server ini adalah {{prefix}}",
+    "already_set_prefix": "Prefix sudah diatur ke {{prefix}}",
+    "invalid_prefix": "Prefix tidak valid. Prefix harus lebih dari satu karakter",
+    "no_prefix": "Tidak ada prefix yang diberikan.",
+    "set_prefix": "Prefix diatur ke {{prefix}}",
+    "reset_prefix": "Prefix direset ke default, yaitu imperia!"
+}

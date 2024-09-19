@@ -1,8 +1,0 @@
-{
-    "list_languages": "Bahasa yang tersedia:\n{{languages}}",
-    "invalid_language": "Bahasa tidak valid. Bahasa yang tersedia: {{languages}}",
-    "no_language": "Tidak ada bahasa yang diberikan. Bahasa yang tersedia: {{languages}}",
-    "already_set": "Bahasa sudah diatur ke {{language}}",
-    "set": "Bahasa diatur ke {{language}}",
-    "reset": "Bahasa diatur ulang ke default, yaitu Bahasa Inggris Amerika (en-US)"
-}
