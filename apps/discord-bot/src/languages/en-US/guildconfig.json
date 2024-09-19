@@ -1,9 +1,12 @@
 {
     "list_disabled_commands": "Disabled commands for this server:\n{{commands}}",
+    "no_disabled_commands": "No commands are disabled for this server.",
+    "cannot_disable": "Cannot disable command {{command}}.",
+    "cannot_disable_guildconfig": "Cannot disable guildconfig command, as it is required for managing the guild configuration.",
     "invalid_command": "Invalid command provided.",
     "no_command": "No command provided.",
-    "already_disabled": "Command is already disabled.",
-    "already_enabled": "Command is already enabled.",
+    "already_disabled": "Command {{command}} is already disabled.",
+    "already_enabled": "Command {{command}} is already enabled.",
     "disabled": "Command {{command}} disabled.",
     "enabled": "Command {{command}} enabled.",
 

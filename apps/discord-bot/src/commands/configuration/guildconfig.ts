@@ -193,9 +193,13 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
 
         const embed = new ImperiaEmbedBuilder().setTheme("info");
         embed.setDescription(
-            await resolveKey(message, "guildconfig:list_disabled_commands", {
-                commands: disabledCommands.join(", "),
-            }),
+            await resolveKey(
+                message,
+                disabledCommands.length > 0 ? "guildconfig:list_disabled_commands" : "guildconfig:no_disabled_commands",
+                {
+                    commands: disabledCommands.join(", "),
+                },
+            ),
         );
 
         return message.reply({ embeds: [embed] });
@@ -229,7 +233,7 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
         if (!isDisabled) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: await resolveKey(interaction, "guildconfig:command_already_enabled", { command }),
+                message: await resolveKey(interaction, "guildconfig:already_enabled", { command }),
             });
         }
 
@@ -274,7 +278,7 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
         if (!isDisabled) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: await resolveKey(message, "guildconfig:command_already_enabled", { command: command.name }),
+                message: await resolveKey(message, "guildconfig:already_enabled", { command: command.name }),
             });
         }
 
@@ -305,11 +309,18 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
+        if (command === "guildconfig") {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: await resolveKey(interaction, "guildconfig:cannot_disable_guildconfig"),
+            });
+        }
+
         const isDisabled = await this.container.utilities.guild.isCommandDisabled(interaction.guild.id, command);
         if (isDisabled) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
-                message: await resolveKey(interaction, "guildconfig:command_already_disabled", { command }),
+                message: await resolveKey(interaction, "guildconfig:already_disabled", { command }),
             });
         }
 
@@ -320,7 +331,7 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
         });
     }
 
-    public async messageCommandDisable(message: Message) {
+    public async messageCommandDisable(message: Message, args: Args) {
         if (!message.guild) {
             throw new UserError({
                 identifier: ImperiaIdentifiers.CommandServiceError,
@@ -328,7 +339,48 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
             });
         }
 
-        return message.reply("Command disable");
+        const commandArgument: ResultType<ImperiaCommand> = await args.pickResult("command");
+
+        if (commandArgument.isErr()) {
+            const error: UserError | ArgumentError<string> = commandArgument.unwrapErr();
+
+            // If the argument provided is invalid, we'll throw an error.
+            if (error.identifier === ImperiaIdentifiers.ArgumentCommandError) {
+                throw new UserError({
+                    identifier: ImperiaIdentifiers.CommandServiceError,
+                    message: await resolveKey(message, "language:invalid_command"),
+                });
+            }
+
+            // If the argument provided is missing, we'll throw an error.
+            throw new UserError({
+                identifier: ImperiaIdentifiers.ArgsMissing,
+                message: await resolveKey(message, "language:no_command"),
+            });
+        }
+
+        const command = commandArgument.unwrap();
+
+        if (command.name === "guildconfig") {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: await resolveKey(message, "guildconfig:cannot_disable_guildconfig"),
+            });
+        }
+
+        const isDisabled = await this.container.utilities.guild.isCommandDisabled(message.guild.id, command.name);
+        if (isDisabled) {
+            throw new UserError({
+                identifier: ImperiaIdentifiers.CommandServiceError,
+                message: await resolveKey(message, "guildconfig:already_disabled", { command: command.name }),
+            });
+        }
+
+        await this.container.utilities.guild.setDisabledCommand(message.guild.id, command.name);
+
+        return message.reply({
+            content: await resolveKey(message, "guildconfig:disabled", { command: command.name }),
+        });
     }
 
     /* -------------------------------------------------------------------------- */

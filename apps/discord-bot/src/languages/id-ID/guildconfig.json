@@ -1,5 +1,8 @@
 {
     "list_disabled_commands": "Perintah yang dinonaktifkan untuk server ini:\n{{commands}}",
+    "no_disabled_commands": "Tidak ada perintah yang dinonaktifkan untuk server ini.",
+    "cannot_disable": "Tidak dapat menonaktifkan perintah {{command}}.",
+    "cannot_disable_guildconfig": "Tidak dapat menonaktifkan perintah guildconfig, karena diperlukan untuk mengelola konfigurasi guild.",
     "invalid_command": "Perintah yang diberikan tidak valid.",
     "no_command": "Tidak ada perintah yang diberikan.",
     "already_disabled": "Perintah sudah dinonaktifkan.",
