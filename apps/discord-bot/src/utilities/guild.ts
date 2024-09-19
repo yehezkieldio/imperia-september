@@ -47,6 +47,8 @@ export class GuildUtility extends Utility {
         const [settings] = await database.select().from(guildSettings).where(equal(guildSettings.guildId, guildId));
 
         if (!settings) {
+            await this.create(guildId);
+
             throw new UserError({
                 identifier: ImperiaIdentifiers.UtilitiesError,
                 message: "Failed to get guild settings.",
