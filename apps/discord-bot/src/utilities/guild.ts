@@ -16,29 +16,45 @@ export class GuildUtility extends Utility {
         });
     }
 
-    public async create(guildId: string): Promise<void> {
-        await database.transaction(async (tx) => {
-            await tx.insert(guilds).values({
-                discordId: guildId,
+    public async create(guildId: string): Promise<boolean> {
+        try {
+            await database.transaction(async (tx) => {
+                await tx.insert(guilds).values({
+                    discordId: guildId,
+                });
+
+                await tx.insert(guildSettings).values({
+                    guildId,
+                });
             });
 
-            await tx.insert(guildSettings).values({
-                guildId,
-            });
-        });
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
-    public async delete(guildId: string): Promise<void> {
-        await database.transaction(async (tx) => {
-            await tx.delete(guilds).where(equal(guilds.discordId, guildId));
-            await tx.delete(guildSettings).where(equal(guildSettings.guildId, guildId));
-        });
+    public async delete(guildId: string): Promise<boolean> {
+        try {
+            await database.transaction(async (tx) => {
+                await tx.delete(guilds).where(equal(guilds.discordId, guildId));
+                await tx.delete(guildSettings).where(equal(guildSettings.guildId, guildId));
+            });
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     public async exists(guildId: string): Promise<boolean> {
-        const guild = await database.select().from(guilds).where(equal(guilds.discordId, guildId));
+        try {
+            const guild = await database.select().from(guilds).where(equal(guilds.discordId, guildId));
 
-        return guild.length > 0;
+            return guild.length > 0;
+        } catch (e) {
+            return false;
+        }
     }
 
     /* -------------------------------------------------------------------------- */

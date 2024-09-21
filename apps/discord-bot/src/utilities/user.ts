@@ -27,16 +27,25 @@ export class UserUtility extends Utility {
         }
     }
 
-    public async delete(userId: string): Promise<void> {
-        await database.transaction(async (tx) => {
-            await tx.delete(users).where(equal(users.discordId, userId));
-        });
+    public async delete(userId: string): Promise<boolean> {
+        try {
+            await database.transaction(async (tx) => {
+                await tx.delete(users).where(equal(users.discordId, userId));
+            });
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     public async exists(userId: string): Promise<boolean> {
-        const user = await database.select().from(users).where(equal(users.discordId, userId));
+        try {
+            const user = await database.select().from(users).where(equal(users.discordId, userId));
 
-        return user.length > 0;
+            return user.length > 0;
+        } catch (e) {
+            return false;
+        }
     }
 
     public async get(userId: string): Promise<User | null> {
