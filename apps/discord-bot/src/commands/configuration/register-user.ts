@@ -46,7 +46,7 @@ export class RegisterUserCommand extends ImperiaCommand {
         });
 
         const user = await this.container.utilities.user.get(interaction.user.id);
-        if (user === null) {
+        if (user !== null) {
             return interaction.editReply({
                 content: await resolveKey(interaction, "register-user:already_registered"),
             });

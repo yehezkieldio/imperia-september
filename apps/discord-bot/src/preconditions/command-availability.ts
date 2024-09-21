@@ -2,7 +2,7 @@ import { AllFlowsPrecondition, type Result, type UserError } from "@sapphire/fra
 import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Message } from "discord.js";
 import { ImperiaIdentifiers } from "#lib/extensions/constants/identifiers";
 
-export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
+export class CommandAvailabilityPrecondition extends AllFlowsPrecondition {
     public constructor(context: AllFlowsPrecondition.LoaderContext, options: AllFlowsPrecondition.Options) {
         super(context, {
             ...options,
@@ -26,7 +26,7 @@ export class EnforceBlacklistPrecondition extends AllFlowsPrecondition {
         if (message.guildId === null) return this.ok();
 
         const commandName = await this.container.utilities.bot.getCommandFromContent(message);
-        this.container.logger.debug(`EnforceBlacklistPrecondition: Command name: ${commandName}`);
+        this.container.logger.debug(`CommandAvailabilityPrecondition: Command name: ${commandName}`);
 
         if (!commandName) return this.ok();
 
