@@ -19,6 +19,7 @@ export class GuildConfigurationCommand extends ImperiaSubcommand {
         super(context, {
             ...options,
             description: "Manage the bot's configuration for this server.",
+            tags: ["guild"],
             requiredUserPermissions: [PermissionFlagsBits.ManageGuild],
             runIn: CommandOptionsRunTypeEnum.GuildAny,
             name: "guildconfig",

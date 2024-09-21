@@ -34,7 +34,8 @@
     },
     "imports": {
         "#arguments/*": "./src/arguments/*.ts",
-        "#commands/*": "./src//*.ts",
+        "#commands/*": "./src/commands/*.ts",
+        "#interactions/*": "./src/interaction-handlers/*.ts",
         "#lib/*": "./src/lib/*.ts",
         "#listeners/*": "./src/listeners/*.ts",
         "#preconditions/*": "./src/preconditions/*.ts",

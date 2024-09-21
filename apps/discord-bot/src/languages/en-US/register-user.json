@@ -1,0 +1,11 @@
+{
+    "prefer_slash": "Please use {{slash}} slash command to create an account!",
+    "agreement_title": "Welcome to Imperia!",
+    "agreement_description": "Imperia will be collecting data from you to create your account, please review the agreement below.",
+    "field_one_title": "— Data Collection and Usage",
+    "field_one_description": "Imperia gathers various Discord-related identifiers and stores content provided by users to deliver its functionalities. This information is solely used to enable the intended features of Imperia and is not utilized for any other purposes.",
+    "agreement_footer": "Click the buttons below to decide whether you agree or decline the agreement.",
+    "agreement_agree": "I agree",
+    "agreement_decline": "I decline",
+    "already_registered": "You are already registered in the system."
+}
