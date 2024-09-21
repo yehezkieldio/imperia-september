@@ -1,5 +1,7 @@
 import { InteractionHandler, InteractionHandlerTypes } from "@sapphire/framework";
+import { resolveKey } from "@sapphire/plugin-i18next";
 import type { ButtonInteraction } from "discord.js";
+import { ImperiaEmbedBuilder } from "#lib/extensions/embed-builder";
 
 export enum UserAgreementStatus {
     CONFIRMED = "confirmed",
@@ -39,6 +41,35 @@ export class UserAgreementHandler extends InteractionHandler {
 
         await interaction.update({
             components: [],
+        });
+
+        if (data.status === UserAgreementStatus.DECLINED) {
+            return interaction.editReply({
+                embeds: [
+                    new ImperiaEmbedBuilder()
+                        .setDescription(await resolveKey(interaction, "register-user:status_declined"))
+                        .setTheme("error"),
+                ],
+            });
+        }
+
+        if (!data.userId) return;
+
+        const user = await this.container.utilities.user.create(data.userId);
+        if (!user) {
+            return interaction.editReply({
+                embeds: [
+                    new ImperiaEmbedBuilder()
+                        .setDescription(await resolveKey(interaction, "register-user:error_on_creation"))
+                        .setTheme("error"),
+                ],
+            });
+        }
+
+        return interaction.editReply({
+            embeds: [
+                new ImperiaEmbedBuilder().setDescription(await resolveKey(interaction, "register-user:status_agreed")),
+            ],
         });
     }
 }

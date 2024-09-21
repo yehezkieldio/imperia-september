@@ -7,5 +7,8 @@
     "agreement_footer": "Click the buttons below to decide whether you agree or decline the agreement.",
     "agreement_agree": "I agree",
     "agreement_decline": "I decline",
-    "already_registered": "You are already registered in the system."
+    "already_registered": "You are already registered in the system.",
+    "status_agreed": "You have agreed to Imperia's user agreement and have been registered! Welcome and enjoy your stay~",
+    "status_declined": "You have declined Imperia's user agreement, and have not been registered. Some features may not be available to you, should you change your mind, you can re-run the register command.",
+    "error_on_creation": "An error occurred while registering you as a user. Please try again later or contact the developers for assistance."
 }

@@ -1,1 +1,14 @@
-{}
+{
+    "prefer_slash": "Silakan gunakan perintah {{slash}} untuk membuat akun!",
+    "agreement_title": "Selamat datang di Imperia!",
+    "agreement_description": "Imperia akan mengumpulkan data dari Anda untuk membuat akun Anda, silakan tinjau perjanjian di bawah ini.",
+    "field_one_title": "— Pengumpulan dan Penggunaan Data",
+    "field_one_description": "Imperia mengumpulkan berbagai pengenal terkait Discord dan menyimpan konten yang disediakan oleh pengguna untuk memberikan fungsionalitasnya. Informasi ini hanya digunakan untuk mengaktifkan fitur yang dimaksud dari Imperia dan tidak digunakan untuk tujuan lain.",
+    "agreement_footer": "Klik tombol di bawah ini untuk memutuskan apakah Anda setuju atau menolak perjanjian.",
+    "agreement_agree": "Saya setuju",
+    "agreement_decline": "Saya tidak setuju",
+    "already_registered": "Anda sudah terdaftar dalam sistem.",
+    "status_agreed": "Anda telah menyetujui perjanjian pengguna Imperia dan telah terdaftar! Selamat datang dan nikmati masa tinggal Anda~",
+    "status_declined": "Anda telah menolak perjanjian pengguna Imperia, dan belum terdaftar. Beberapa fitur mungkin tidak tersedia untuk Anda, jika Anda berubah pikiran, Anda dapat menjalankan kembali perintah pendaftaran.",
+    "error_on_creation": "Terjadi kesalahan saat mendaftarkan Anda sebagai pengguna. Silakan coba lagi nanti atau hubungi pengembang untuk bantuan."
+}

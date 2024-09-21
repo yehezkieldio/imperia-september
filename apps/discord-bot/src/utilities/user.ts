@@ -13,12 +13,18 @@ export class UserUtility extends Utility {
         });
     }
 
-    public async create(userId: string): Promise<void> {
-        await database.transaction(async (tx) => {
-            await tx.insert(users).values({
-                discordId: userId,
+    public async create(userId: string) {
+        try {
+            await database.transaction(async (tx) => {
+                await tx.insert(users).values({
+                    discordId: userId,
+                });
             });
-        });
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     public async delete(userId: string): Promise<void> {
